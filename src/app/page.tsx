@@ -1,34 +1,85 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
+/* ---------- tiny stroke icons (no emoji) ---------- */
+function I({ d, extra }: { d: React.ReactNode; extra?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={extra || "h-5 w-5"} aria-hidden="true">
+      {d}
+    </svg>
+  );
+}
+const IconBook = () => <I d={<><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5V5.5Z" /><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20" /></>} />;
+const IconLayers = () => <I d={<><path d="M12 3 3 8l9 5 9-5-9-5Z" /><path d="m3 12 9 5 9-5" /><path d="m3 16 9 5 9-5" /></>} />;
+const IconChat = () => <I d={<><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z" /></>} />;
+const IconGlobe = () => <I d={<><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3c2.5 2.6 3.9 5.7 3.9 9S14.5 18.4 12 21c-2.5-2.6-3.9-5.7-3.9-9S9.5 5.6 12 3Z" /></>} />;
+const IconUsers = () => <I d={<><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" /><circle cx="17.5" cy="9" r="2.5" /><path d="M16 15.2c2.8.2 4.9 1.9 5.5 4.8" /></>} />;
+const IconPhone = () => <I d={<path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" />} />;
+const IconBolt = () => <I d={<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />} />;
+const IconShield = () => <I d={<><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" /><path d="m9 12 2 2 4-4" /></>} />;
+const IconDb = () => <I d={<><ellipse cx="12" cy="5" rx="7" ry="3" /><path d="M5 5v14c0 1.7 3.1 3 7 3s7-1.3 7-3V5" /><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" /></>} />;
+const IconDoc = () => <I d={<><path d="M6 2h8l4 4v16H6V2Z" /><path d="M14 2v4h4" /><path d="m9.5 14 2 2 3.5-3.5" /></>} />;
+const IconCap = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
+    <path d="M12 3 1 9l11 6 11-6-11-6Z" />
+    <path d="M5 11.5V16c0 1.7 3.1 3 7 3s7-1.3 7-3v-4.5l-7 3.8-7-3.8Z" />
+  </svg>
+);
+const IconSearch = () => <I extra="h-4 w-4" d={<><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></>} />;
+const IconCheck = () => <I extra="h-4 w-4" d={<path d="m4.5 12.5 5 5 10-11" />} />;
+
 const FAQS = [
-  { q: "How does a college get started?", a: "Register your college and we create its workspace with admin credentials. Departments then publish their documents, notices and links — the assistant is ready for students the same day." },
-  { q: "What can be added to the knowledge base?", a: "Documents, notices, links and plain notes — exam schedules, fee structures, hostel rules, placement updates, club information, contact directories and more." },
-  { q: "Who manages the knowledge base?", a: "Each department owns its own section and can update it anytime from one dashboard. College admins keep oversight of the whole workspace." },
-  { q: "How are answers kept trustworthy?", a: "Every answer is retrieved from published college knowledge first, then written with the department and document shown beside it. Anything missing is flagged to admins instead of guessed." },
-  { q: "Do students need an app or account?", a: "No. One open chat on the college workspace handles everything — no installs, no sign-ups, no queues." },
-  { q: "Is each college's data isolated?", a: "Yes. Every college operates inside its own workspace. Knowledge, departments and questions never cross into another institution." },
+  { q: "How do the answers stay accurate?", a: "Answers come only from knowledge your departments publish. When a department updates a document or notice, every future answer reflects the change — nothing is invented in between." },
+  { q: "Do students need an account?", a: "No. Students open the college chat and ask directly — no app to install, no sign-up, no queue." },
+  { q: "Who manages the knowledge base?", a: "Each department owns its own section and keeps it current from one dashboard. College admins keep oversight across the whole workspace." },
+  { q: "Which languages does it support?", a: "CollegeMate answers in the languages Indian students actually use — including English and major regional languages." },
+  { q: "What can be added to the knowledge base?", a: "Documents, notices, links and plain notes — exam schedules, fee structures, hostel rules, placements, clubs, events, contacts and more." },
+  { q: "How does a college get started?", a: "Register your college and we create its workspace with admin credentials. Departments publish their knowledge, and the assistant goes live the same day." },
 ];
 
-const COVERAGE = ["Exams", "Fees", "Hostel", "Placements", "Clubs", "Events", "Contacts", "Notices"];
-
-const SHY_POINTS = [
-  { n: "01", t: "Questions feel too small to ask", d: "Many students hesitate to walk up to an office or a professor with something they fear sounds like a silly question — so they stay confused instead." },
-  { n: "02", t: "Offices run on queues", d: "Counters, office hours and email threads make every small doubt expensive. A two-minute question costs half a day." },
-  { n: "03", t: "Information hides in silos", d: "The answer exists — in a PDF, on a notice board, with one staff member — but students can't see it, so they ask around or give up." },
+const ABOUT_CARDS = [
+  { icon: <IconBook />, t: "Answers with receipts", d: "Every answer shows the department and document it came from — no guessing, no fake facts." },
+  { icon: <IconLayers />, t: "One place for everything", d: "Admissions, exams, clubs, events, hostels, placements — the whole college in a single chat." },
+  { icon: <IconChat />, t: "No more hesitation", d: "Students ask anything, anytime, without feeling shy about approaching faculty or offices." },
 ];
 
-const BUILD_STEPS = [
-  { n: "01", t: "Workspace on day one", d: "We create your college workspace and issue admin credentials. The open chat goes live immediately." },
-  { n: "02", t: "Departments publish", d: "Each department adds its documents, notices and links to its own section — updated anytime, from one dashboard." },
-  { n: "03", t: "Gaps get filled", d: "Questions the assistant can't answer surface to admins, who add the missing knowledge once and never answer it twice." },
+const PROBLEMS = [
+  { icon: <IconGlobe />, t: "Buried under too many sites", d: "College data lives across a dozen pages and portals — much of it outdated, half of it unreachable from a simple search." },
+  { icon: <IconUsers />, t: "Clubs & events stay invisible", d: "Twelve clubs, five fests, one sports meet — and most students find out only after it's over." },
+  { icon: <IconPhone />, t: "No idea who to contact", d: "A fee issue, a hostel complaint, a scholarship doubt — who handles what? Nobody knows the right door to knock." },
+  { icon: <IconChat />, t: "Too shy to ask faculty", d: "Many students hesitate to walk up to an office or professor and ask something they fear is a 'silly question'." },
 ];
 
-const DEPTS = ["Admissions", "CSE", "ECE", "Hostel", "Examinations", "Placements", "Library", "Clubs"];
+const SOLUTIONS = [
+  { n: "1", icon: <IconDb />, t: "Your college builds the brain", d: "Each department adds documents, notes and links to its own knowledge-base section — updated anytime, from one simple dashboard." },
+  { n: "2", icon: <IconChat />, t: "Students just ask", d: "No app, no account, no queue. One open chat handles everything from exam dates to club events." },
+  { n: "3", icon: <IconDoc />, t: "Answers show their sources", d: "Every response names the department and document they came from — nothing made up." },
+];
+
+const ASK_CHIPS = ["Exam dates", "Fee structure", "Clubs & events", "Hostel rules", "Placement contacts", "Library timings", "Who to contact for…"];
+
+const COMPARE: [string, string, string, string][] = [
+  ["Setup time", "Days — managed by your own college", "Months of vendor onboarding", "No single answer anywhere"],
+  ["Cost", "Built for every college", "Enterprise pricing", "Free, but nobody finds anything"],
+  ["Who owns the knowledge", "Your departments, updated anytime", "Vendor-managed", "Scattered, stale, often broken"],
+  ["Languages", "Multilingual, including regional", "Mostly English", "English only"],
+  ["Answer sources", "Shown with every answer", "Varies by vendor", "Not applicable"],
+  ["Insight loop", "Unanswered questions surface to admins", "Becomes a ticket queue", "None"],
+];
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll(".rv"));
+    const io = new IntersectionObserver(
+      (es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("rv-in"); io.unobserve(e.target); } }),
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -41,231 +92,191 @@ export default function Home() {
   };
 
   return (
-    <div className="page">
+    <div className="page !pt-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* ================= HERO — chat-first ================= */}
-      <section className="section relative">
-        <div className="dots dots-fade pointer-events-none absolute inset-0" />
-        <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
+      {/* ================= HERO ================= */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F1F0FD] via-white to-white" />
+          <div className="absolute -left-24 top-0 h-96 w-72 bg-gradient-to-b from-[#FDEFD4] to-transparent opacity-70 blur-2xl" />
+        </div>
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-16 pt-14 lg:grid-cols-[1.05fr_.95fr]">
           <div>
-            <p className="eyebrow rise">College knowledge · answered</p>
-            <h1 className="h1 rise mt-4 max-w-xl" style={{ animationDelay: "70ms" }}>
-              Your college has the answers. CollegeMate makes them accessible.
+            <span className="badge badge-acc mono rise !text-[11px]">
+              <span className="text-[10px]">✦</span> RAG-powered · managed by your own college
+            </span>
+            <h1 className="h1 rise mt-5 max-w-xl" style={{ animationDelay: "70ms" }}>
+              Your entire college, <span className="text-[#5046E5]">one question away.</span>
             </h1>
             <p className="muted rise mt-4 max-w-lg text-[15px] leading-relaxed" style={{ animationDelay: "140ms" }}>
-              One open chat where students ask anything — exam dates, fees, hostel rules,
-              placements, clubs — and get answers pulled from official college knowledge,
-              with the source shown every time.
+              Exam schedules, clubs, events, fee details, who to contact — CollegeMate answers
+              instantly from your college&apos;s official knowledge base, and shows the source
+              behind every answer.
             </p>
-            <div className="rise mt-6 flex flex-wrap gap-3" style={{ animationDelay: "210ms" }}>
-              <Link href="/register" className="btn-primary">Register your college →</Link>
-              <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
+            <div className="rise mt-6 flex flex-wrap items-center gap-4" style={{ animationDelay: "210ms" }}>
+              <Link href="/demo/mits-madanapalle" className="btn-primary group">
+                <IconSearch /> Ask the demo bot
+              </Link>
+              <Link href="/#solution" className="group text-[14px] font-semibold text-[#5046E5]">
+                See how it works <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+              </Link>
             </div>
-            <p className="mono muted rise mt-4 text-[11.5px]" style={{ animationDelay: "260ms" }}>
-              Web · Mobile · API — no installation required
-            </p>
+            <div className="rise mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[12.5px] font-medium text-[#5F5F7D]" style={{ animationDelay: "280ms" }}>
+              <span className="flex items-center gap-1.5"><span className="text-[#5046E5]"><IconShield /></span> Sourced answers</span>
+              <span className="flex items-center gap-1.5"><span className="text-[#5046E5]"><IconBolt /></span> No login for students</span>
+              <span className="flex items-center gap-1.5"><span className="text-[#5046E5]"><IconBook /></span> Department-owned knowledge</span>
+            </div>
           </div>
 
-          <div id="product" className="rise scroll-mt-28" style={{ animationDelay: "180ms" }}>
-            <p className="mono muted mb-2 text-[11px] tracking-[.14em]">OPEN CHAT · NO APP · NO ACCOUNT</p>
-            <div className="card-elevated overflow-hidden">
-              <div className="mockbar">
-                <span className="mockdot" /><span className="mockdot" /><span className="mockdot" />
-                <span className="mono ml-2 text-[11px] font-semibold">CollegeMate</span>
-                <span className="mono ml-auto flex items-center gap-1.5 text-[10px] text-[#15803D]">
-                  <span className="dot dot-pulse" aria-hidden="true" />live
+          <div className="rise" style={{ animationDelay: "180ms" }}>
+            <div className="card float-soft overflow-hidden !rounded-2xl !shadow-[0_24px_60px_rgba(23,23,46,0.12)]">
+              <div className="flex items-center gap-2.5 border-b border-[#EFEFF7] px-4 py-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5046E5] text-white"><IconCap /></span>
+                <span>
+                  <span className="block text-[13px] font-bold leading-tight">CollegeMate</span>
+                  <span className="block text-[11px] text-[#8F8FA8]">Demo University assistant</span>
                 </span>
+                <span className="badge badge-green mono ml-auto !text-[10.5px]"><span className="dot dot-pulse" aria-hidden="true" />Online</span>
               </div>
               <div className="space-y-3 p-4">
-                <div className="chat-bubble-a w-11/12 text-[13.5px] leading-relaxed">
-                  <span className="chat-role chat-role-a"><span className="dot" aria-hidden="true" />COLLEGEMATE</span>
-                  <div>Hi! I&apos;m CollegeMate. Ask me anything about this college — exams, clubs, events, contacts. I&apos;ll show the source with every answer.</div>
+                <div className="chat-msg ml-auto w-fit max-w-[90%] rounded-2xl rounded-br-md bg-[#5046E5] px-3.5 py-2.5 text-[13px] font-medium text-white" style={{ animationDelay: ".5s" }}>
+                  When is the mid-semester exam schedule out?
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {["Attendance %?", "Hostel timings?", "Bonafide process?"].map((c) => (
-                    <span key={c} className="badge mono !text-[11px]">{c}</span>
-                  ))}
+                <div className="chat-msg w-fit max-w-[95%] rounded-2xl rounded-bl-md bg-[#F1F0F7] px-3.5 py-2.5 text-[13px] leading-relaxed" style={{ animationDelay: ".9s" }}>
+                  Mid-semester exams run <strong>March 2–9, 2026</strong>. The detailed timetable is published by the Examination Branch two weeks before the exam.
+                  <span className="mono mt-2 flex items-center gap-1.5 text-[10.5px] text-[#8F8FA8]">
+                    <IconDoc /> Academics · Academic Calendar 2026
+                  </span>
                 </div>
-                <div className="chat-bubble-q ml-auto w-11/12 text-[13.5px]">
-                  <span className="chat-role chat-role-q"><span className="dot" aria-hidden="true" />YOU</span>
-                  <div>Who do I contact for a hostel issue?</div>
+                <div className="chat-msg ml-auto w-fit max-w-[90%] rounded-2xl rounded-br-md bg-[#5046E5] px-3.5 py-2.5 text-[13px] font-medium text-white" style={{ animationDelay: "1.3s" }}>
+                  Which clubs can I join this semester?
                 </div>
-                <div className="chat-bubble-a w-11/12 text-[13.5px] leading-relaxed">
-                  <span className="chat-role chat-role-a"><span className="dot" aria-hidden="true" />COLLEGEMATE</span>
-                  <div>Warden&apos;s office, Hostel Block A — ext. 214, 9am–5pm on working days.</div>
+                <div className="chat-msg flex w-fit items-center gap-1.5 rounded-2xl rounded-bl-md bg-[#F1F0F7] px-3.5 py-2.5 text-[13px] text-[#8F8FA8]" style={{ animationDelay: "1.7s" }}>
+                  <span className="typing" aria-hidden="true"><span /><span /><span /></span> thinking…
                 </div>
-                <div className="mono muted flex flex-wrap gap-1.5 text-[10.5px]">
-                  <span className="badge badge-green">answered from knowledge</span>
-                  <span className="badge">[hostel-handbook.pdf · p.6 · Hostel]</span>
-                </div>
-                <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm w-full">Ask it yourself — open the demo →</Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= COVERAGE ================= */}
-      <section aria-label="Coverage" className="border-y border-[#E6E5F1] bg-[#F5F4FC]">
-        <div className="py-8 text-center">
-          <p className="eyebrow">One place for everything</p>
-          <div className="mt-4 flex flex-wrap justify-center gap-2 px-6">
-            {COVERAGE.map((c) => (
-              <span key={c} className="badge mono !px-4 !py-2 !text-[12px]">{c}</span>
+      {/* ================= ABOUT ================= */}
+      <section id="about" className="section scroll-mt-28">
+        <div className="grid items-start gap-10 lg:grid-cols-[1fr_1fr]">
+          <div className="rv">
+            <p className="eyebrow !text-[#5046E5]">About</p>
+            <h2 className="h2 mt-3">An AI assistant built for real colleges, not demos.</h2>
+            <p className="muted mt-4 max-w-[65ch] text-[14px] leading-relaxed">
+              CollegeMate is a RAG-based assistant: each college&apos;s departments keep their
+              own official knowledge base — documents, notices and links — and the AI answers
+              only from that. Nothing invented, nothing borrowed from the internet. When a
+              department updates the knowledge, the answers update with it.
+            </p>
+            <p className="muted mt-3 max-w-[65ch] text-[14px] leading-relaxed">
+              It speaks the languages Indian students actually use — English included.
+            </p>
+          </div>
+          <div className="space-y-3">
+            {ABOUT_CARDS.map((c, i) => (
+              <div key={c.t} className="card card-hover rv flex gap-3.5 p-4" data-d={i} style={{ transitionDelay: `${i * 90}ms` }}>
+                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-[#EEEDFD] text-[#5046E5]">{c.icon}</span>
+                <span>
+                  <span className="block text-[14.5px] font-bold">{c.t}</span>
+                  <span className="muted mt-0.5 block text-[13px] leading-relaxed">{c.d}</span>
+                </span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================= SHY PROBLEM ================= */}
-      <section className="section">
-        <p className="eyebrow">The problem</p>
-        <h2 className="h2 mt-3 max-w-2xl">Students shouldn&apos;t need courage to get informed.</h2>
-        <p className="lead mt-3 max-w-xl text-[14.5px]">
-          The information exists. Reaching it is what fails — through hesitation,
-          queues, and hiding places.
-        </p>
-        <div className="mt-8 divide-y divide-[#E6E5F1] border-y border-[#E6E5F1]">
-          {SHY_POINTS.map((p) => (
-            <div key={p.n} className="grid gap-1.5 py-6 sm:grid-cols-[56px_1fr] sm:gap-5">
-              <span className="mono text-[13px] font-bold text-[#5046E5]">{p.n}</span>
-              <span>
-                <span className="text-[16px] font-semibold tracking-tight">{p.t}</span>
-                <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{p.d}</span>
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ================= COLLEGE BUILDS THE BRAIN ================= */}
-      <section className="section">
-        <p className="eyebrow">How colleges start</p>
-        <h2 className="h2 mt-3 max-w-2xl">Your college builds the brain.</h2>
-        <p className="lead mt-3 max-w-xl text-[14.5px]">
-          No IT project, no content migration. A workspace, department sections,
-          and the same day live.
-        </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-3">
-          {BUILD_STEPS.map((s) => (
-            <div key={s.n} className="border-t-2 border-[#5046E5] pt-4">
-              <span className="mono text-[12px] font-bold text-[#5046E5]">{s.n}</span>
-              <div className="mt-1 text-[15px] font-semibold">{s.t}</div>
-              <div className="muted mt-1 text-[12.5px] leading-relaxed">{s.d}</div>
-            </div>
-          ))}
-        </div>
-        <div className="card mt-8 p-6 sm:p-8">
-          <div className="grid items-center gap-6 lg:grid-cols-[1fr_1fr]">
-            <div>
-              <h3 className="h3">Departments stay current, anytime.</h3>
-              <p className="muted mt-2 max-w-[65ch] text-[13.5px] leading-relaxed">
-                Each department owns its section and updates documents, notes and links
-                whenever things change. New circular in the morning, correct answers by afternoon.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {DEPTS.map((d) => (
-                  <span key={d} className="badge mono !text-[11px]">{d}</span>
-                ))}
+      {/* ================= PROBLEM ================= */}
+      <section id="problem" className="scroll-mt-20 bg-[#4F46E5]">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <p className="eyebrow rv !text-[#C7C5F5]">The problem</p>
+          <h2 className="h2 rv mt-3 max-w-2xl !text-white">Students can&apos;t find the information their own college already has.</h2>
+          <p className="rv mt-3 max-w-2xl text-[14px] leading-relaxed text-[#D8D7F2]">
+            Survey after survey confirms it: finding information is among students&apos; top
+            frustrations with college websites — info is scattered, incomplete, and hard to navigate.
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {PROBLEMS.map((p, i) => (
+              <div key={p.t} className="prob-card rv rounded-xl border border-white/15 bg-white/[0.08] p-5 backdrop-blur-sm" data-d={i} style={{ transitionDelay: `${i * 90}ms` }}>
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 text-white">{p.icon}</span>
+                <div className="mt-4 text-[14.5px] font-bold text-white">{p.t}</div>
+                <div className="mt-1.5 text-[12.5px] leading-relaxed text-[#D8D7F2]">{p.d}</div>
               </div>
-            </div>
-            <div className="rounded-xl border border-[#BFE3CC] bg-[#E9F6EE] p-5">
-              <p className="mono text-[11px] tracking-[.14em] text-[#15803D]">ADMIN GAP LOOP</p>
-              <p className="mt-2 text-[14px] font-semibold text-[#0E3B22]">Unanswered questions surface to admins.</p>
-              <p className="mt-1 text-[13px] leading-relaxed text-[#3F6B52]">
-                Anything the assistant can&apos;t answer is flagged with the exact question.
-                Admins add the missing knowledge once — and every future student gets it instantly.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ================= NO APP STRIP ================= */}
-      <section aria-label="No install needed" className="border-y border-[#E6E5F1] bg-[#F5F4FC]">
-        <p className="mx-auto max-w-3xl px-6 py-8 text-center text-[15px] font-medium leading-relaxed">
-          No app, no account, no queue.{" "}
-          <span className="muted">One open chat on the college workspace handles everything
-          from exam dates to club events.</span>
-        </p>
-      </section>
-
-      {/* ================= WHY (differentiators, compact) ================= */}
-      <section id="why" className="section scroll-mt-28">
-        <p className="eyebrow">Why CollegeMate</p>
-        <h2 className="h2 mt-3 max-w-2xl">Answers only from your college — never the open internet.</h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          {[
-            ["Cited", "Every answer shows the department and document it came from. No guessing, no invented facts."],
-            ["Department-owned", "Each department publishes and maintains its own knowledge section."],
-            ["Gap-aware", "Admins see exactly which questions failed — and fix the knowledge behind them."],
-            ["Isolated", "Every college runs its own workspace. Nothing crosses institutions."],
-          ].map(([t, d]) => (
-            <div key={t} className="card card-hover card-pad">
-              <div className="font-display text-lg font-bold tracking-tight">{t}</div>
-              <div className="muted mt-1 text-[13px] leading-relaxed">{d}</div>
+      {/* ================= SOLUTION ================= */}
+      <section id="solution" className="section scroll-mt-28 text-center">
+        <p className="eyebrow rv !text-[#5046E5]">The solution</p>
+        <h2 className="h2 rv mx-auto mt-3 max-w-2xl">RAG: your college&apos;s knowledge, answered conversationally.</h2>
+        <div className="mt-10 grid gap-4 text-left sm:grid-cols-3">
+          {SOLUTIONS.map((s, i) => (
+            <div key={s.n} className="card card-hover rv group relative overflow-hidden p-5 pt-6" data-d={i} style={{ transitionDelay: `${i * 90}ms` }}>
+              <span className="pointer-events-none absolute -top-3 right-3 font-display text-[88px] font-extrabold leading-none text-[#5046E5]/[0.07] transition-colors group-hover:text-[#5046E5]/[0.13]" aria-hidden="true">{s.n}</span>
+              <span className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-[#EEEDFD] text-[#5046E5] transition-transform group-hover:scale-110">{s.icon}</span>
+              <div className="relative mt-4 text-[14.5px] font-bold">{s.t}</div>
+              <div className="muted relative mt-1.5 text-[13px] leading-relaxed">{s.d}</div>
             </div>
+          ))}
+        </div>
+        <div className="rv mt-8 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-[12.5px] font-medium text-[#5F5F7D]">What students ask:</span>
+          {ASK_CHIPS.map((c) => (
+            <Link key={c} href="/demo/mits-madanapalle" className="chip badge mono !text-[11.5px]">{c}</Link>
           ))}
         </div>
       </section>
 
       {/* ================= COMPARE ================= */}
-      <section id="compare" className="section scroll-mt-28">
-        <p className="eyebrow">Comparison</p>
-        <h2 className="h2 mt-3 max-w-2xl">Why not a generic AI chatbot?</h2>
-        <div className="card mt-6 overflow-x-auto p-2">
-          <table className="cmp min-w-[520px]">
-            <thead><tr><th></th><th>CollegeMate</th><th>Generic AI</th></tr></thead>
-            <tbody>
-              {[
-                ["College-specific knowledge", "✓", "—"],
-                ["Your institutional documents", "✓", "—"],
-                ["Source citations", "✓", "Limited"],
-                ["Department knowledge", "✓", "—"],
-                ["College workspace", "✓", "—"],
-                ["Controlled knowledge scope", "✓", "—"],
-                ["Institutional fallback", "✓", "—"],
-              ].map((r) => (
-                <tr key={r[0]}>
-                  <td>{r[0]}</td>
-                  <td className="hlcol">{r[1]}</td>
-                  <td className="muted">{r[2]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section id="compare" className="scroll-mt-20 bg-[#F7F7FC]">
+        <div className="mx-auto max-w-7xl px-6 py-16 text-center sm:py-20">
+          <p className="eyebrow rv !text-[#5046E5]">Compare</p>
+          <h2 className="h2 rv mx-auto mt-3 max-w-xl">Why not just buy a university chatbot?</h2>
+          <p className="muted rv mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed">
+            Existing players like Ivy.ai, Ocelot and AdmitHub serve big universities well — but
+            they&apos;re priced and paced for enterprise. Most colleges never get there.
+          </p>
+          <div className="card rv mx-auto mt-8 max-w-4xl overflow-x-auto !rounded-2xl p-2 text-left">
+            <table className="cmp min-w-[640px]">
+              <thead><tr><th></th><th className="!text-[#5046E5]">CollegeMate</th><th>University chatbots</th><th>College website</th></tr></thead>
+              <tbody>
+                {COMPARE.map((r) => (
+                  <tr key={r[0]} className="cmp-row">
+                    <td>{r[0]}</td>
+                    <td className="hlcol !bg-[#EEEDFD]/60">{r[1]}</td>
+                    <td className="muted">{r[2]}</td>
+                    <td className="muted">{r[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <p className="mx-auto mt-8 max-w-2xl text-center font-display text-2xl font-bold tracking-tight">
-          Generic AI knows the world. <span className="text-[#5046E5]">CollegeMate knows your institution.</span>
-        </p>
       </section>
 
       {/* ================= FAQ ================= */}
       <section id="faq" className="section scroll-mt-28">
-        <p className="eyebrow text-center">Quick answers</p>
-        <h2 className="h2 mt-3 text-center">Frequently asked questions.</h2>
-        <div className="mx-auto mt-6 grid max-w-4xl gap-2.5 sm:grid-cols-2">
+        <h2 className="h2 rv text-center">Questions, answered.</h2>
+        <div className="rv mx-auto mt-8 max-w-2xl">
           {FAQS.map((f, i) => (
-            <div key={f.q} className={`faq-item ${openFaq === i ? "open" : ""}`}>
-              <button className="faq-q" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                {f.q}<span className="muted" aria-hidden="true">{openFaq === i ? "−" : "+"}</span>
+            <div key={f.q} className="border-b border-[#E6E5F1]">
+              <button className="faq-q group !px-1" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                <span className="transition-colors group-hover:text-[#5046E5]">{f.q}</span>
+                <span className={`muted transition-transform duration-300 ${openFaq === i ? "rotate-180" : ""}`} aria-hidden="true">⌄</span>
               </button>
-              {openFaq === i && <div className="faq-a">{f.a}</div>}
+              <div className={`acc-body ${openFaq === i ? "acc-open" : ""}`}>
+                <div className="overflow-hidden"><div className="faq-a !px-1">{f.a}</div></div>
+              </div>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* ================= FINAL CTA ================= */}
-      <section className="section text-center">
-        <h2 className="h2 mx-auto max-w-2xl">Your college already has the knowledge.</h2>
-        <p className="muted mx-auto mt-3 max-w-xl text-[15px]">Give everyone a better way to access it.</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link href="/register" className="btn-primary">Register your college →</Link>
-          <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
-        </div>
-        <p className="mono muted mt-4 text-[11.5px]">Free demo · No installation · Web · Mobile · API</p>
       </section>
     </div>
   );
