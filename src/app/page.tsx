@@ -41,7 +41,6 @@ const QA_SETS: { q: string; a: string; cite: string; tint: string }[][] = [
 
 export default function Home() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [news, setNews] = useState("");
   const [stats, setStats] = useState({ colleges: "…", depts: "…", docs: "…" });
   const [qi, setQi] = useState(0);
@@ -103,19 +102,13 @@ export default function Home() {
               anything else you need to know. CollegeMate finds the answer from your
               college&apos;s verified information and shows you the source behind it.
             </p>
-            <form
-              className="rise mt-6 flex max-w-md gap-2"
+            <div
+              className="rise mt-6 flex max-w-md flex-wrap gap-3"
               style={{ animationDelay: "180ms" }}
-              onSubmit={(e) => { e.preventDefault(); goRegister(email); }}
             >
-              <input
-                className="input !rounded-full !bg-white"
-                type="email" required
-                value={email} onChange={(e) => setEmail(e.target.value)}
-                placeholder="Type your college email" aria-label="College email"
-              />
-              <button type="submit" className="btn-primary flex-none">Get started</button>
-            </form>
+              <Link href="/register" className="btn-primary">Register now</Link>
+              <Link href="/#about" className="btn-ghost">Know more</Link>
+            </div>
             <div className="rise mt-7 flex gap-8" style={{ animationDelay: "260ms" }}>
               {[[stats.colleges, "Colleges live"], [stats.depts, "Departments"], [stats.docs, "Documents indexed"]].map(([v, c]) => (
                 <div key={c}>
