@@ -101,7 +101,7 @@ export default function Auth() {
             aria-selected={tab === t}
             onClick={() => { setTab(t); setMsg(""); }}
             className={`flex-1 rounded-lg px-4 py-2.5 text-[14px] font-semibold transition ${
-              tab === t ? "bg-white text-black" : "muted hover:text-white"
+              tab === t ? "bg-[#F5EFE2] text-[#171310]" : "muted hover:text-[#F5EFE2]"
             }`}
           >
             {t === "login" ? "Login" : t === "signup" ? "Sign up" : "Register college"}

@@ -66,39 +66,91 @@ export default function Home() {
     <div className="page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* ================= HOME / HERO ================= */}
-      <section id="home" className="section relative text-center">
+      {/* ================= HOME / HERO — asymmetric ================= */}
+      <section id="home" className="section relative">
         <div className="dots dots-fade pointer-events-none absolute inset-0" />
-        <div className="relative">
-          <Link href="/demo/mits-madanapalle" className="badge badge-gold mono !text-[11px]">
-            <span className="dot dot-pulse" aria-hidden="true" /> Live demo running — MITS-Madanapalle
-          </Link>
-          <h1 className="h1 mx-auto mt-5 max-w-3xl">AI-Powered Knowledge Assistant for Colleges</h1>
-          <p className="mx-auto mt-4 max-w-xl text-[17px] font-semibold leading-relaxed">
-            Give every student instant access to trusted college information.
-          </p>
-          <p className="mx-auto mt-3 max-w-2xl text-[14.5px] leading-relaxed text-[#d4d4d8]">
-            CollegeMate is an <span className="hl">AI-powered college knowledge assistant</span> that
-            delivers accurate, college-specific answers from your institution&apos;s{" "}
-            <span className="hl">verified documents, policies, notices, academic regulations, fees,
-            admissions, placements, and more</span> — with source citations for every response.
-          </p>
-          <p className="mono muted mt-4 text-[12px] tracking-wide">Built for Students · Faculty · Administrators</p>
-          <p className="mono muted mt-2 text-[11.5px]">Web · Mobile · API</p>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Link href="/register" className="btn-primary">Register Your College</Link>
-            <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore Live Demo</Link>
+        <div className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E5A83B]/10 blur-3xl" aria-hidden="true" />
+        <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
+          <div>
+            <Link href="/demo/mits-madanapalle" className="badge badge-gold mono rise !text-[11px]" style={{ animationDelay: "0ms" }}>
+              <span className="dot dot-pulse" aria-hidden="true" /> Live demo running — MITS-Madanapalle
+            </Link>
+            <h1 className="h1 rise mt-5 max-w-xl" style={{ animationDelay: "70ms" }}>
+              AI-Powered Knowledge Assistant for Colleges
+            </h1>
+            <p className="rise mt-4 max-w-lg text-[17px] font-semibold leading-relaxed" style={{ animationDelay: "140ms" }}>
+              Give every student instant access to trusted college information.
+            </p>
+            <p className="muted rise mt-3 max-w-lg text-[14.5px] leading-relaxed" style={{ animationDelay: "210ms" }}>
+              CollegeMate is an <span className="hl">AI-powered college knowledge assistant</span> that
+              delivers accurate, college-specific answers from your institution&apos;s{" "}
+              <span className="hl">verified documents, policies, notices, academic regulations, fees,
+              admissions, placements, and more</span> — with source citations for every response.
+            </p>
+            <p className="mono muted rise mt-4 text-[12px] tracking-wide" style={{ animationDelay: "260ms" }}>
+              Built for Students · Faculty · Administrators
+            </p>
+            <div className="rise mt-6 flex flex-wrap gap-3" style={{ animationDelay: "320ms" }}>
+              <Link href="/register" className="btn-primary">Register Your College</Link>
+              <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore Live Demo</Link>
+            </div>
+            <p className="mono muted rise mt-3 text-[11.5px]" style={{ animationDelay: "360ms" }}>
+              Web · Mobile · API — free demo · no installation
+            </p>
           </div>
 
-          <div className="card-elevated mx-auto mt-8 max-w-2xl p-6 text-left sm:p-8">
-            <h2 className="font-display text-xl font-bold tracking-tight">Ask. Find. Understand.</h2>
-            <p className="muted mt-2 text-[13.5px] leading-relaxed">
-              Students can ask questions in natural language and instantly find the information
-              they need — without searching through dozens of PDFs, websites, notices, or
-              internal documents.
-            </p>
-            <ul className="mt-4 grid gap-x-6 gap-y-2.5 text-[13.5px] sm:grid-cols-2">
+          <div className="rise" style={{ animationDelay: "200ms" }}>
+            <div className="card-elevated overflow-hidden">
+              <div className="mockbar">
+                <span className="mockdot" /><span className="mockdot" /><span className="mockdot" />
+                <span className="mono ml-2 text-[10px] text-[#6E6656]">collegemate / mits-madanapalle / chat</span>
+                <span className="mono ml-auto flex items-center gap-1.5 text-[10px] text-[#86EFAC]">
+                  <span className="dot dot-pulse" aria-hidden="true" />live
+                </span>
+              </div>
+              <div className="space-y-3 p-4">
+                <div className="chat-bubble-q ml-auto w-11/12 text-[13.5px]">
+                  <span className="chat-role chat-role-q"><span className="dot" aria-hidden="true" />YOU</span>
+                  <div>What is the minimum attendance to write the end-semester exams?</div>
+                </div>
+                <div className="chat-bubble-a w-11/12 text-[13.5px] leading-relaxed">
+                  <span className="chat-role chat-role-a"><span className="dot" aria-hidden="true" />COLLEGEMATE</span>
+                  <div>75% in each subject. Condonation applies down to 65% with a medical certificate and a ₹480 condonation fee paid before the hall-ticket deadline.</div>
+                </div>
+                <div className="mono muted flex flex-wrap gap-1.5 text-[10.5px]">
+                  <span className="badge badge-green">high confidence</span>
+                  <span className="badge">[academic-regulations.pdf · p.24 · Academics]</span>
+                  <span className="badge">[circular-118.pdf · p.2 · Exams]</span>
+                </div>
+                <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm w-full">Ask it yourself — open the demo →</Link>
+              </div>
+            </div>
+            <div className="card mt-3 p-4">
+              <div className="cmdtabs justify-center !border-0 !p-0">
+                {CMDS.map((c, i) => (
+                  <button key={c.tab} onClick={() => setCmd(i)} className={`cmdtab ${cmd === i ? "cmdtab-active" : ""}`}>
+                    {c.tab}
+                  </button>
+                ))}
+              </div>
+              <div className="cmdbody !px-1">
+                <code className="cmdcode mx-auto">$ {CMDS[cmd].code}</code>
+                <button onClick={copyCmd} className="cmdcopy">{copied ? "Copied" : "Copy"}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card-elevated mt-10 p-6 sm:p-8">
+          <div className="grid items-start gap-6 lg:grid-cols-[.9fr_1.1fr]">
+            <div>
+              <h2 className="font-display text-2xl font-bold tracking-tight">Ask. Find. Understand.</h2>
+              <p className="muted mt-2 max-w-md text-[13.5px] leading-relaxed">
+                Students ask in natural language and instantly find what they need — no digging
+                through dozens of PDFs, websites, notices, or internal documents.
+              </p>
+            </div>
+            <ul className="grid gap-x-6 gap-y-2.5 text-[13.5px] sm:grid-cols-2">
               {[
                 "Verified institutional knowledge",
                 "AI-powered search and answers",
@@ -113,31 +165,6 @@ export default function Home() {
               ))}
             </ul>
           </div>
-
-          <div className="card mx-auto mt-4 max-w-2xl p-6 text-left sm:p-8">
-            <p className="eyebrow !text-[#e8b34b]">Live college demo</p>
-            <h2 className="font-display mt-2 text-xl font-bold tracking-tight">Experience CollegeMate with MITS Madanapalle</h2>
-            <p className="muted mt-2 text-[13.5px] leading-relaxed">
-              Explore how a college-specific AI assistant can answer questions using institutional
-              knowledge and verified documents.
-            </p>
-            <Link href="/demo/mits-madanapalle" className="btn-primary btn-sm mt-4">Explore Live Demo</Link>
-          </div>
-
-          <div className="card mx-auto mt-4 max-w-2xl p-5 text-left">
-            <div className="cmdtabs justify-center !border-0 !p-0">
-              {CMDS.map((c, i) => (
-                <button key={c.tab} onClick={() => setCmd(i)} className={`cmdtab ${cmd === i ? "cmdtab-active" : ""}`}>
-                  {c.tab}
-                </button>
-              ))}
-            </div>
-            <div className="cmdbody !px-1">
-              <code className="cmdcode mx-auto">$ {CMDS[cmd].code}</code>
-              <button onClick={copyCmd} className="cmdcopy">{copied ? "Copied" : "Copy"}</button>
-            </div>
-          </div>
-          <p className="mono muted mt-4 text-[11.5px]">Free Demo · Live Workspace · No Installation Required</p>
         </div>
       </section>
 
@@ -145,16 +172,16 @@ export default function Home() {
       <section id="about" className="section">
         <p className="eyebrow">About</p>
         <h2 className="h2 mt-2 max-w-2xl">One trusted place for everything your college knows</h2>
-        <div className="mt-6 grid items-start gap-4 lg:grid-cols-[1.5fr_1fr]">
+        <div className="mt-6 grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
           <div className="card card-pad">
-            <p className="text-[14.5px] leading-relaxed">
+            <p className="max-w-[65ch] text-[14.5px] leading-relaxed">
               CollegeMate is an AI-powered, RAG-based institutional knowledge platform.
               Colleges collect verified academic, administrative, department, placement, club and
               support information into <span className="hl">isolated workspaces</span> — then
               students and faculty ask questions and get answers{" "}
               <span className="hl">grounded in those documents, with citations</span>.
             </p>
-            <p className="muted mt-3 text-[14px] leading-relaxed">
+            <p className="muted mt-3 max-w-[65ch] text-[14px] leading-relaxed">
               No prompt engineering, no public-internet guessing. Upload approved documents,
               organize them by department, and let every answer point back to its source —
               or honestly hand over a verified contact when the knowledge runs out.
@@ -175,7 +202,7 @@ export default function Home() {
               ].map(([t, d]) => (
                 <li key={t} className="flex gap-2.5">
                   <span className="mt-0.5 text-[#86efac]" aria-hidden="true">✓</span>
-                  <span><span className="font-semibold">{t}</span> <span className="muted">— {d}</span></span>
+                  <span className="max-w-[65ch]"><span className="font-semibold">{t}</span> <span className="muted">— {d}</span></span>
                 </li>
               ))}
             </ul>
@@ -184,20 +211,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= PROBLEMS ================= */}
+      {/* ================= PROBLEMS — editorial rows, no cards ================= */}
       <section id="problems" className="section">
         <p className="eyebrow">Problems colleges face</p>
         <h2 className="h2 mt-2 max-w-2xl">The information exists. Nobody can reach it.</h2>
         <p className="lead mt-3 max-w-xl text-[14px]">Six patterns we heard from every campus office — and why they persist without a knowledge platform.</p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 divide-y divide-[#201B13] border-y border-[#201B13]">
           {PROBLEMS.map((p, i) => (
-            <div key={p.t} className="card card-hover card-pad">
-              <div className="flex items-start justify-between gap-2">
-                <span className="mono muted text-[11px]">0{i + 1}</span>
-                <span className="badge badge-red mono !text-[10px]">{p.tag}</span>
-              </div>
-              <div className="mt-3 text-[14.5px] font-semibold leading-snug">{p.t}</div>
-              <div className="muted mt-1.5 text-[13px] leading-relaxed">{p.d}</div>
+            <div key={p.t} className="grid gap-1.5 py-5 sm:grid-cols-[56px_1fr_auto] sm:items-baseline sm:gap-5">
+              <span className="mono text-[13px] font-bold text-[#E5A83B]">0{i + 1}</span>
+              <span>
+                <span className="text-[15.5px] font-semibold tracking-tight">{p.t}</span>
+                <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{p.d}</span>
+              </span>
+              <span className="badge badge-red mono !text-[10px]">{p.tag}</span>
             </div>
           ))}
         </div>
@@ -208,28 +235,28 @@ export default function Home() {
         <div className="ticks card p-8 sm:p-12">
           <span className="tick tick-tl">+</span><span className="tick tick-tr">+</span>
           <span className="tick tick-bl">+</span><span className="tick tick-br">+</span>
-          <p className="eyebrow !text-[#e8b34b]">Solution</p>
+          <p className="eyebrow !text-[#E5A83B]">Solution</p>
           <h2 className="h2 mt-2 max-w-2xl">Why a scoped knowledge platform — and what changes</h2>
 
           <div className="mt-8 grid gap-3">
             {WHY.map((w) => (
-              <div key={w.n} className="grid gap-2 rounded-xl border border-[#232329] bg-[#0d0d0f] p-5 sm:grid-cols-[64px_1fr] sm:gap-4">
-                <span className="mono text-[13px] font-bold text-[#e8b34b]">{w.n}</span>
+              <div key={w.n} className="grid gap-2 rounded-xl border border-[#2A241A] bg-[#100D09] p-5 sm:grid-cols-[64px_1fr] sm:gap-4">
+                <span className="mono text-[13px] font-bold text-[#E5A83B]">{w.n}</span>
                 <span>
                   <span className="text-[15px] font-semibold">{w.t}</span>
-                  <span className="muted mt-1 block text-[13.5px] leading-relaxed">{w.d}</span>
+                  <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{w.d}</span>
                 </span>
               </div>
             ))}
           </div>
 
           <div className="divider mt-8 pt-6">
-            <p className="mono text-[11px] tracking-[.18em] text-[#e8b34b]">OUTCOMES</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <p className="mono text-[11px] tracking-[.18em] text-[#E5A83B]">OUTCOMES</p>
+            <div className="mt-2 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {OUTCOMES.map(([a, b]) => (
-                <div key={a} className="rounded-xl border border-[#6b4d1a] bg-gradient-to-b from-[#1c1408] to-[#100c05] p-5 text-center">
-                  <div className="font-display text-xl font-bold text-[#e8b34b]">{a}</div>
-                  <div className="muted mt-1 text-[12px] leading-relaxed">{b}</div>
+                <div key={a} className="border-t-2 border-[#E5A83B] pt-4">
+                  <div className="font-display text-2xl font-bold tracking-tight text-[#E5A83B]">{a}</div>
+                  <div className="muted mt-1 max-w-[65ch] text-[12.5px] leading-relaxed">{b}</div>
                 </div>
               ))}
             </div>
@@ -295,24 +322,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
+      {/* ================= CTA — asymmetric ================= */}
       <section className="section">
-        <div className="ticks card relative overflow-hidden p-10 text-center sm:p-16">
+        <div className="ticks card relative overflow-hidden p-8 sm:p-12">
           <div className="dots pointer-events-none absolute inset-0 opacity-60" />
           <span className="tick tick-tl">+</span><span className="tick tick-tr">+</span>
           <span className="tick tick-bl">+</span><span className="tick tick-br">+</span>
-          <div className="relative">
-            <p className="mono text-[11px] tracking-[.2em] muted">FREE · CITED · WORKSPACE-SCOPED</p>
-            <h2 className="h2 mx-auto mt-3 max-w-xl">Make your college&apos;s knowledge accessible</h2>
-            <p className="muted mx-auto mt-3 max-w-md text-[14px]">
-              Give students and faculty <span className="hl">one trusted place</span> for academic,
-              administrative, departmental and support information.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link href="/register" className="btn-primary">Register your college</Link>
-              <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
+          <div className="relative grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
+            <div>
+              <p className="mono text-[11px] tracking-[.2em] muted">FREE · CITED · WORKSPACE-SCOPED</p>
+              <h2 className="h2 mt-3">Make your college&apos;s knowledge accessible</h2>
+              <p className="muted mt-3 max-w-md text-[14px] leading-relaxed">
+                Give students and faculty <span className="hl">one trusted place</span> for academic,
+                administrative, departmental and support information.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/register" className="btn-primary">Register your college</Link>
+                <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
+              </div>
             </div>
-            <p className="mono muted mt-4 text-[11.5px]">hub · workspace · upload · chat</p>
+            <div className="card-elevated p-5">
+              <p className="mono text-[11px] tracking-[.14em] text-[#E5A83B]">GET STARTED IN ONE COMMAND</p>
+              <div className="cmdtabs mt-3 justify-start !border-0 !p-0">
+                {CMDS.map((c, i) => (
+                  <button key={c.tab} onClick={() => setCmd(i)} className={`cmdtab ${cmd === i ? "cmdtab-active" : ""}`}>
+                    {c.tab}
+                  </button>
+                ))}
+              </div>
+              <div className="cmdbody !px-1">
+                <code className="cmdcode">$ {CMDS[cmd].code}</code>
+                <button onClick={copyCmd} className="cmdcopy">{copied ? "Copied" : "Copy"}</button>
+              </div>
+              <p className="mono muted mt-1 text-[11px]">hub · workspace · upload · chat</p>
+            </div>
           </div>
         </div>
       </section>

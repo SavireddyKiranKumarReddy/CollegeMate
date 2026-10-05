@@ -29,10 +29,10 @@ export const metadata: Metadata = {
 
 function Nav() {
   return (
-    <div className="sticky top-0 z-50 mx-auto max-w-6xl px-6 pt-5">
-      <header className="flex items-center justify-between gap-3 rounded-full border border-[#232329] bg-[#101013]/90 py-2.5 pl-4 pr-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
+    <div className="sticky top-0 z-50 mx-auto max-w-7xl px-6 pt-5">
+      <header className="flex items-center justify-between gap-3 rounded-full border border-[#2A241A] bg-[#14110C]/90 py-2.5 pl-4 pr-2.5 shadow-[0_8px_30px_rgba(10,7,3,0.4)] backdrop-blur-md">
         <Link href="/" className="flex items-center gap-2" aria-label="CollegeMate home">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[13px] font-bold text-black" aria-hidden="true">C</span>
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5EFE2] text-[13px] font-bold text-[#171310]" aria-hidden="true">C</span>
           <span className="font-display text-[15px] font-bold tracking-tight">CollegeMate</span>
         </Link>
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
@@ -71,20 +71,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
       </head>
       <body>
         <a href="#main-content" className="skip-link">Skip to content</a>
         <Nav />
-        <main id="main-content" className="mx-auto max-w-6xl px-6">{children}</main>
-        <footer className="mx-auto max-w-6xl px-6 pb-8 pt-4">
-          <div className="border-t border-[#1c1c21] pt-8">
+        <main id="main-content" className="mx-auto max-w-7xl px-6">{children}</main>
+        <footer className="mx-auto max-w-7xl px-6 pb-8 pt-4">
+          <div className="border-t border-[#201B13] pt-8">
             <div className="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[13px] font-bold text-black">C</span>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5EFE2] text-[13px] font-bold text-[#171310]">C</span>
                   <span className="font-display text-[15px] font-bold">CollegeMate</span>
                 </div>
                 <p className="muted mt-3 max-w-xs text-[13px] leading-relaxed">
@@ -94,22 +94,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div>
                 <div className="eyebrow">Platform</div>
                 <div className="mt-3 flex flex-col gap-2 text-[13.5px]">
-                  <Link href="/#about" className="muted hover:text-white">About</Link>
-                  <Link href="/#problems" className="muted hover:text-white">Problems</Link>
-                  <Link href="/#solution" className="muted hover:text-white">Solution</Link>
-                  <Link href="/#compare" className="muted hover:text-white">Compare</Link>
-                  <Link href="/#faq" className="muted hover:text-white">FAQs</Link>
-                  <Link href="/demo/mits-madanapalle" className="muted hover:text-white">Live demo</Link>
-                  <Link href="/register" className="muted hover:text-white">Register</Link>
+                  <Link href="/#about" className="muted hover:text-[#F5EFE2]">About</Link>
+                  <Link href="/#problems" className="muted hover:text-[#F5EFE2]">Problems</Link>
+                  <Link href="/#solution" className="muted hover:text-[#F5EFE2]">Solution</Link>
+                  <Link href="/#compare" className="muted hover:text-[#F5EFE2]">Compare</Link>
+                  <Link href="/#faq" className="muted hover:text-[#F5EFE2]">FAQs</Link>
+                  <Link href="/demo/mits-madanapalle" className="muted hover:text-[#F5EFE2]">Live demo</Link>
+                  <Link href="/register" className="muted hover:text-[#F5EFE2]">Register</Link>
                 </div>
               </div>
               <div>
                 <div className="eyebrow">Roles</div>
                 <div className="mt-3 flex flex-col gap-2 text-[13.5px]">
-                  <Link href="/dashboard" className="muted hover:text-white">Super admin</Link>
-                  <Link href="/college" className="muted hover:text-white">College admin</Link>
-                  <Link href="/faculty" className="muted hover:text-white">Faculty upload</Link>
-                  <Link href="/chat" className="muted hover:text-white">Student chat</Link>
+                  <Link href="/dashboard" className="muted hover:text-[#F5EFE2]">Super admin</Link>
+                  <Link href="/college" className="muted hover:text-[#F5EFE2]">College admin</Link>
+                  <Link href="/faculty" className="muted hover:text-[#F5EFE2]">Faculty upload</Link>
+                  <Link href="/chat" className="muted hover:text-[#F5EFE2]">Student chat</Link>
                 </div>
               </div>
               <div className="card card-pad">
@@ -121,10 +121,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
             </div>
-            <div className="font-display mt-10 text-center font-bold leading-none tracking-tight text-[#1d1d21] select-none" style={{ fontSize: "clamp(60px, 14vw, 170px)" }}>
+            <div className="font-display mt-10 text-center font-bold leading-none tracking-tight text-[#262015] select-none" style={{ fontSize: "clamp(60px, 14vw, 170px)" }}>
               CollegeMate
             </div>
-            <div className="muted mt-4 flex flex-col gap-1 border-t border-[#1c1c21] pt-5 text-[12px] sm:flex-row sm:justify-between">
+            <div className="muted mt-4 flex flex-col gap-1 border-t border-[#201B13] pt-5 text-[12px] sm:flex-row sm:justify-between">
               <span>© CollegeMate 2026 · Developed by NxtGenSec</span>
               <span className="mono">RAG · cited · workspace-scoped</span>
             </div>
