@@ -97,10 +97,11 @@ export default function Home() {
       <section id="home" className="relative overflow-hidden scroll-mt-20">
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-12 lg:grid-cols-[1.05fr_.95fr]">
           <div>
-            <h1 className="h1 rise max-w-xl">College answers, one question away.</h1>
+            <h1 className="h1 rise max-w-xl">Any question about your college. One trusted answer.</h1>
             <p className="muted rise mt-4 max-w-md text-[14.5px] leading-relaxed" style={{ animationDelay: "100ms" }}>
-              Your college&apos;s official knowledge — exams, fees, hostel, placements, clubs —
-              answered instantly in one open chat, with the source behind every answer.
+              Ask about exams, fees, attendance, hostel, placements, admissions, clubs, or
+              anything else you need to know. CollegeMate finds the answer from your
+              college&apos;s verified information and shows you the source behind it.
             </p>
             <form
               className="rise mt-6 flex max-w-md gap-2"
