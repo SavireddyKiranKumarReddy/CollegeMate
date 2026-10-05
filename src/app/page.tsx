@@ -63,7 +63,7 @@ const COMPARE: [string, string, string, string][] = [
   ["Setup time", "Days — managed by your own college", "Months of vendor onboarding", "No single answer anywhere"],
   ["Cost", "Built for every college", "Enterprise pricing", "Free, but nobody finds anything"],
   ["Who owns the knowledge", "Your departments, updated anytime", "Vendor-managed", "Scattered, stale, often broken"],
-  ["Languages", "Multilingual, including regional", "Mostly English", "English only"],
+  ["Languages", "Multilingual via Sarvam", "Mostly English", "English only"],
   ["Answer sources", "Shown with every answer", "Varies by vendor", "Not applicable"],
   ["Insight loop", "Unanswered questions surface to admins", "Becomes a ticket queue", "None"],
 ];
@@ -245,28 +245,28 @@ export default function Home() {
             they&apos;re priced and paced for enterprise. Most colleges never get there.
           </p>
           <div className="card rv mx-auto mt-8 max-w-4xl overflow-hidden !rounded-2xl text-left">
-            <div className="overflow-x-auto p-2">
-              <table className="cmp min-w-[640px] border-collapse">
+            <div className="overflow-x-auto">
+              <table className="cmp min-w-[680px] border-collapse">
                 <colgroup>
-                  <col />
-                  <col className="bg-[#EEEDFD]/70" />
-                  <col /><col />
+                  <col style={{ width: "24%" }} />
+                  <col className="bg-[#EEEDFD]/70" style={{ width: "30%" }} />
+                  <col style={{ width: "23%" }} /><col style={{ width: "23%" }} />
                 </colgroup>
                 <thead>
                   <tr>
                     <th className="!border-t-0"></th>
-                    <th className="!border-t-0 !text-[#5046E5]">CollegeMate</th>
-                    <th className="!border-t-0">University chatbots</th>
-                    <th className="!border-t-0">College website</th>
+                    <th className="!border-t-0 !text-[13px] !font-bold !normal-case !tracking-normal !text-[#5046E5]">CollegeMate</th>
+                    <th className="!border-t-0 !text-[13px] !font-bold !normal-case !tracking-normal">University chatbots</th>
+                    <th className="!border-t-0 !text-[13px] !font-bold !normal-case !tracking-normal">College website</th>
                   </tr>
                 </thead>
                 <tbody>
                   {COMPARE.map((r) => (
                     <tr key={r[0]} className="cmp-row">
-                      <td className="font-medium">{r[0]}</td>
-                      <td className="hlcol">{r[1]}</td>
-                      <td className="muted">{r[2]}</td>
-                      <td className="muted">{r[3]}</td>
+                      <td className="!text-[13px] font-semibold">{r[0]}</td>
+                      <td className="hlcol !text-[13px]">{r[1]}</td>
+                      <td className="muted !text-[13px]">{r[2]}</td>
+                      <td className="muted !text-[13px]">{r[3]}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -278,13 +278,14 @@ export default function Home() {
 
       {/* ================= FAQ ================= */}
       <section id="faq" className="section scroll-mt-28">
-        <h2 className="h2 rv text-center">Questions, answered.</h2>
-        <div className="rv mx-auto mt-8 max-w-2xl">
+        <p className="eyebrow rv text-center !text-[#5046E5]">FAQs</p>
+        <h2 className="h2 rv mt-3 text-center">Questions, answered.</h2>
+        <div className="rv mx-auto mt-8 max-w-[640px]">
           {FAQS.map((f, i) => (
-            <div key={f.q} className="border-b border-[#E6E5F1] transition-colors hover:border-[#D3D2E6]">
-              <button className="group flex w-full items-center justify-between gap-4 py-5 text-left text-[15px] font-semibold" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+            <div key={f.q} className="border-b border-[#E2E1F0] transition-colors first:border-t hover:border-[#D3D2E6]">
+              <button className="group flex w-full items-center justify-between gap-4 py-[22px] text-left text-[14.5px] font-semibold" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                 <span className="transition-colors group-hover:text-[#5046E5]">{f.q}</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`h-4 w-4 flex-none text-[#8F8FA8] transition-transform duration-300 group-hover:text-[#5046E5] ${openFaq === i ? "rotate-180" : ""}`} aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 flex-none text-[#A5A4BE] transition-transform duration-300 group-hover:text-[#5046E5] ${openFaq === i ? "rotate-180" : ""}`} aria-hidden="true">
                   <path d="m6 9 6 6 6-6" />
                 </svg>
               </button>
