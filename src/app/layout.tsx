@@ -35,15 +35,29 @@ function Nav() {
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[13px] font-bold text-black" aria-hidden="true">C</span>
           <span className="font-display text-[15px] font-bold tracking-tight">CollegeMate</span>
         </Link>
-        <nav className="hidden items-center gap-0.5 lg:flex">
-          <Link href="/#workflows" className="navlink">Workflows</Link>
-          <Link href="/#plans" className="navlink">Plans</Link>
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+          <Link href="/" className="navlink">Home</Link>
+          <Link href="/#about" className="navlink">About</Link>
+          <Link href="/#problems" className="navlink">Problems</Link>
+          <Link href="/#solution" className="navlink">Solution</Link>
           <Link href="/#compare" className="navlink">Compare</Link>
-          <Link href="/#faq" className="navlink">FAQ</Link>
+          <Link href="/#faq" className="navlink">FAQs</Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Link href="/demo/mits-madanapalle" className="navlink hidden sm:inline">Live demo</Link>
+          <Link href="/auth" className="navlink hidden sm:inline">Login</Link>
+          <Link href="/demo/mits-madanapalle" className="navlink hidden xl:inline">Live demo</Link>
           <Link href="/register" className="btn-primary btn-sm">Register your college</Link>
+          <details className="relative lg:hidden">
+            <summary className="btn-ghost btn-sm cursor-pointer list-none">Menu</summary>
+            <div className="card card-pad absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 p-2">
+              <Link href="/" className="navlink">Home</Link>
+              <Link href="/#about" className="navlink">About</Link>
+              <Link href="/#problems" className="navlink">Problems</Link>
+              <Link href="/#solution" className="navlink">Solution</Link>
+              <Link href="/#compare" className="navlink">Compare</Link>
+              <Link href="/#faq" className="navlink">FAQs</Link>
+            </div>
+          </details>
         </div>
       </header>
     </div>
@@ -80,8 +94,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div>
                 <div className="eyebrow">Platform</div>
                 <div className="mt-3 flex flex-col gap-2 text-[13.5px]">
-                  <Link href="/#workflows" className="muted hover:text-white">How it works</Link>
-                  <Link href="/#plans" className="muted hover:text-white">Plans</Link>
+                  <Link href="/#about" className="muted hover:text-white">About</Link>
+                  <Link href="/#problems" className="muted hover:text-white">Problems</Link>
+                  <Link href="/#solution" className="muted hover:text-white">Solution</Link>
+                  <Link href="/#compare" className="muted hover:text-white">Compare</Link>
+                  <Link href="/#faq" className="muted hover:text-white">FAQs</Link>
                   <Link href="/demo/mits-madanapalle" className="muted hover:text-white">Live demo</Link>
                   <Link href="/register" className="muted hover:text-white">Register</Link>
                 </div>

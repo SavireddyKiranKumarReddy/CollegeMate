@@ -2,96 +2,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-/* ---------- tiny abstract visuals ---------- */
-function VHub() {
-  return (
-    <div className="space-y-1.5">
-      {[88, 64, 76].map((w, i) => (
-        <div key={i} className="flex items-center gap-2">
-          <div className="h-4 w-4 rounded-full bg-[#2b2b31]" />
-          <div className="mv-bar flex-1" style={{ width: `${w}%` }} />
-          <div className={`mono text-[9px] ${i === 0 ? "text-[#86efac]" : "text-[#71717a]"}`}>{i === 0 ? "approve" : "pending"}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-function VSpace() {
-  return (
-    <div className="grid grid-cols-3 gap-1.5">
-      {["CSE", "ECE", "ADM", "PLC", "HOS", "LIB"].map((t) => (
-        <div key={t} className="mv-chip mono py-1.5 text-center text-[9px] text-[#a1a1aa]">{t}</div>
-      ))}
-    </div>
-  );
-}
-function VDepts() {
-  return (
-    <div className="space-y-1.5">
-      {[92, 78, 85].map((w, i) => (
-        <div key={i} className="flex items-center gap-2">
-          <div className="mv-line" style={{ width: `${w}%` }} />
-          <div className="mono text-[9px] text-[#71717a]">→</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-function VUpload() {
-  return (
-    <div className="space-y-1.5">
-      <div className="mv-chip flex items-center gap-2 px-2 py-1.5">
-        <div className="h-5 w-4 rounded-sm bg-[#2b2b31]" />
-        <div className="flex-1"><div className="mv-line" style={{ width: "80%" }} /></div>
-        <div className="mono text-[9px] text-[#86efac]">ready</div>
-      </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-[#222228]">
-        <div className="h-full w-3/4 rounded-full bg-white" />
-      </div>
-    </div>
-  );
-}
-function VChat() {
-  return (
-    <div className="space-y-1.5">
-      <div className="ml-auto w-3/4 rounded-lg rounded-br-sm bg-[#2b2b31] p-1.5"><div className="mv-line" style={{ width: "85%", background: "#3f3f46" }} /></div>
-      <div className="w-5/6 rounded-lg rounded-bl-sm border border-[#2b2b31] p-1.5">
-        <div className="mv-line" style={{ width: "95%" }} />
-        <div className="mono mt-1 text-[8.5px] text-[#86efac]">[fees.pdf · p.3 · CSE]</div>
-      </div>
-    </div>
-  );
-}
-function VSwap() {
-  const bars = [35, 60, 45, 80, 55, 95, 65, 40, 75, 50, 85, 60, 45, 70, 55, 90, 50, 65];
-  return (
-    <div className="flex h-16 items-end gap-1">
-      {bars.map((h, i) => (
-        <div key={i} className={`flex-1 rounded-sm ${i === 5 || i === 15 ? "bg-[#e8b34b]" : "bg-[#2e2e35]"}`} style={{ height: `${h}%` }} />
-      ))}
-    </div>
-  );
-}
-function VAuth() {
-  return (
-    <div className="space-y-1.5">
-      <div className="mv-chip px-2 py-1.5"><div className="mv-line" style={{ width: "60%" }} /></div>
-      <div className="mv-chip px-2 py-1.5"><div className="mv-line" style={{ width: "75%" }} /></div>
-      <div className="h-6 rounded-full bg-white" />
-    </div>
-  );
-}
-
-const WORKFLOWS = [
-  { v: <VHub />, t: "Super hub", d: "Approve colleges, assign one admin each.", k: "/dashboard", cat: "Admin" },
-  { v: <VSpace />, t: "College space", d: "One workspace per college.", k: "/mits-madanapalle", cat: "Admin" },
-  { v: <VDepts />, t: "Departments", d: "CSE, ECE, Admissions, Hostel.", k: "/college", cat: "Structure" },
-  { v: <VAuth />, t: "Login / Register", d: "Role login, college onboarding.", k: "/auth", cat: "Structure" },
-  { v: <VUpload />, t: "Faculty upload", d: "Dept-scoped PDFs + Excel.", k: "/faculty", cat: "Knowledge" },
-  { v: <VChat />, t: "Scoped chat", d: "Cited answers, fallback + contact.", k: "/chat", cat: "Knowledge" },
-  { v: <VSwap />, t: "Swap LLM", d: "Sarvam-105b → your local model.", k: "/demo/mits-madanapalle", cat: "Knowledge" },
+const CMDS = [
+  { tab: "Register", code: "open  /register   →   onboard your college" },
+  { tab: "Demo", code: "open  /demo/mits-madanapalle   →   live workspace" },
+  { tab: "Chat", code: "open  /chat   →   ask, get cited answers" },
 ];
-const WTABS = ["All", "Admin", "Structure", "Knowledge"];
 
 const FAQS = [
   { q: "What is CollegeMate?", a: "CollegeMate is an AI-powered, RAG-based institutional knowledge platform developed by NxtGenSec — verified academic, administrative, department, placement, club and support info in one cited AI platform." },
@@ -102,29 +17,27 @@ const FAQS = [
   { q: "Is it multi-tenant?", a: "Yes — isolated workspaces per college. Data, departments, documents and queries never cross colleges." },
 ];
 
-const CMDS = [
-  { tab: "Register", code: "open  /register   →   onboard your college" },
-  { tab: "Demo", code: "open  /demo/mits-madanapalle   →   live workspace" },
-  { tab: "Chat", code: "open  /chat   →   ask, get cited answers" },
+const PROBLEMS = [
+  { t: "Information lives everywhere", d: "Fees in one PDF, cutoffs in a spreadsheet, hostel rules on a notice board, club contacts with one senior. Nobody knows the current truth.", tag: "scattered" },
+  { t: "Staff repeat the same answers daily", d: "Attendance rules, bonafide process, certificate timelines — offices burn hours re-answering what documents already contain.", tag: "repeated load" },
+  { t: "Generic chatbots guess", d: "Public AI answers confidently from the open internet — wrong fees, wrong rules, zero accountability to your institution.", tag: "unverified" },
+  { t: "Departments work in silos", d: "CSE, ECE, Admissions, Hostel each keep their own files. Students bounce between desks for one straight answer.", tag: "silos" },
+  { t: "Answers can't be checked", d: "Even when an answer exists, nobody can see which document, page, or department it came from — so nobody trusts it.", tag: "no proof" },
+  { t: "Missing info becomes wrong info", d: "When knowledge runs out, students get silence or a confident guess instead of the right office contact.", tag: "dead ends" },
 ];
 
-function Screen({ href, cap, children }: { href: string; cap: string; children: React.ReactNode }) {
-  return (
-    <Link href={href} className="screen">
-      <div>
-        <div className="mockbar">
-          <span className="mockdot" /><span className="mockdot" /><span className="mockdot" />
-          <span className="mono ml-2 text-[10px] text-[#71717a]">{href}</span>
-        </div>
-        <div className="space-y-2 p-3">{children}</div>
-      </div>
-      <div className="screen-cap"><span>{cap}</span><span>→</span></div>
-    </Link>
-  );
-}
-function sk(w: number) {
-  return <div className="h-2 rounded-full bg-[#222228]" style={{ width: `${w}%` }} />;
-}
+const WHY = [
+  { n: "01", t: "One verified source per college", d: "Each college gets an isolated workspace. Approved documents become a scoped knowledge base — the same truth for students, faculty, and admins." },
+  { n: "02", t: "Answers that show their work", d: "Every response carries [document · department · chunk] citations. When knowledge ends, it falls back to a verified contact — it never guesses." },
+  { n: "03", t: "Departments stay the owners", d: "Faculty upload into their own department scope, admins approve, students ask across all of it. Ownership stays where the knowledge lives." },
+];
+
+const OUTCOMES = [
+  ["Cited", "every answer ships with document sources"],
+  ["Isolated", "zero mixing of data across colleges"],
+  ["Honest", "a fallback contact instead of a guess"],
+  ["Scoped", "department-level access and uploads"],
+];
 
 function Stat({ value, cap }: { value: string; cap: string }) {
   const loading = value === "…" || value === "—";
@@ -143,7 +56,6 @@ function Stat({ value, cap }: { value: string; cap: string }) {
 export default function Home() {
   const [cmd, setCmd] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [wtab, setWtab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [stats, setStats] = useState({ colleges: "…", depts: "…", docs: "…" });
 
@@ -174,8 +86,6 @@ export default function Home() {
     } catch {}
   }
 
-  const cards = WORKFLOWS.filter((w) => WTABS[wtab] === "All" || w.cat === WTABS[wtab]);
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -190,8 +100,8 @@ export default function Home() {
     <div className="page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* ================= HERO ================= */}
-      <section className="section relative text-center">
+      {/* ================= HOME / HERO ================= */}
+      <section id="home" className="section relative text-center">
         <div className="dots dots-fade pointer-events-none absolute inset-0" />
         <div className="relative">
           <Link href="/demo/mits-madanapalle" className="badge badge-gold mono !text-[11px]">
@@ -235,105 +145,112 @@ export default function Home() {
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link href="/register" className="btn-primary">Register your college</Link>
-            <Link href="/auth" className="btn-ghost">Login</Link>
-            <Link href="/#workflows" className="btn-ghost">Know more →</Link>
+            <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
+            <Link href="/#problems" className="btn-ghost">Why it matters →</Link>
           </div>
           <p className="mono muted mt-2.5 text-[11.5px]">free demo · live workspace · no install</p>
         </div>
       </section>
 
-      {/* ================= WORKSPACE PANEL ================= */}
-      <section id="workflows" className="section">
-        <p className="eyebrow text-center">How it fits together</p>
-        <h2 className="h2 mt-2 text-center">One flow, from approval to answer</h2>
-        <div className="mx-auto mt-5 flex max-w-fit items-center gap-1 rounded-full border border-[#232329] bg-[#101013] p-1" role="tablist" aria-label="Workflow categories">
-          {WTABS.map((s, i) => (
-            <button key={s} role="tab" aria-selected={wtab === i} onClick={() => setWtab(i)}
-              className={`mono rounded-full px-4 py-1.5 text-[12px] ${wtab === i ? "bg-white font-semibold text-black" : "muted hover:text-white"}`}>
-              {s}
-            </button>
-          ))}
-        </div>
-        <div className="card mt-4 p-4 sm:p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="mono text-[11.5px] muted">collegemate / {WTABS[wtab].toLowerCase()}</span>
-            <span className="mono hidden text-[11.5px] muted sm:inline">{cards.length} steps</span>
+      {/* ================= ABOUT ================= */}
+      <section id="about" className="section">
+        <p className="eyebrow">About</p>
+        <h2 className="h2 mt-2 max-w-2xl">One trusted place for everything your college knows</h2>
+        <div className="mt-6 grid items-start gap-4 lg:grid-cols-[1.5fr_1fr]">
+          <div className="card card-pad">
+            <p className="text-[14.5px] leading-relaxed">
+              CollegeMate is an AI-powered, RAG-based institutional knowledge platform.
+              Colleges collect verified academic, administrative, department, placement, club and
+              support information into <span className="hl">isolated workspaces</span> — then
+              students and faculty ask questions and get answers{" "}
+              <span className="hl">grounded in those documents, with citations</span>.
+            </p>
+            <p className="muted mt-3 text-[14px] leading-relaxed">
+              No prompt engineering, no public-internet guessing. Upload approved documents,
+              organize them by department, and let every answer point back to its source —
+              or honestly hand over a verified contact when the knowledge runs out.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="badge badge-green mono !text-[11px]">RAG-grounded</span>
+              <span className="badge badge-blue mono !text-[11px]">workspace-scoped</span>
+              <span className="badge badge-gold mono !text-[11px]">cited</span>
+            </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {cards.map((w, i) => (
-              <Link key={w.t} href={w.k} className="card card-hover group block p-4">
-                <div className="mb-3 flex items-start justify-between gap-2">
-                  <span className="badge badge-neutral mono !text-[10px]">{w.cat}</span>
-                  <span className="mono muted text-[10.5px]">0{i + 1}</span>
-                </div>
-                <div className="mb-3 min-h-16">{w.v}</div>
-                <div className="text-[14px] font-semibold">{w.t} <span className="muted transition group-hover:text-white">→</span></div>
-                <div className="muted mt-0.5 text-[12.5px]">{w.d}</div>
-                <div className="mono muted mt-2 text-[10.5px]">{w.k}</div>
-              </Link>
-            ))}
+          <div className="card card-pad">
+            <div className="text-[13.5px] font-semibold">Built for institutions</div>
+            <ul className="mt-3 space-y-2.5 text-[13px]">
+              {[
+                ["Run anywhere", "Web, mobile and API access to every workspace."],
+                ["Model-flexible", "Sarvam today, through an OpenAI-compatible layer built to swap to self-hosted later."],
+                ["By NxtGenSec", "Designed for colleges that answer for their information."],
+              ].map(([t, d]) => (
+                <li key={t} className="flex gap-2.5">
+                  <span className="mt-0.5 text-[#86efac]" aria-hidden="true">✓</span>
+                  <span><span className="font-semibold">{t}</span> <span className="muted">— {d}</span></span>
+                </li>
+              ))}
+            </ul>
+            <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm mt-4 w-full">See it working →</Link>
           </div>
         </div>
       </section>
 
-      {/* ================= CAMPUS PANEL ================= */}
-      <section id="plans" className="section">
+      {/* ================= PROBLEMS ================= */}
+      <section id="problems" className="section">
+        <p className="eyebrow">Problems colleges face</p>
+        <h2 className="h2 mt-2 max-w-2xl">The information exists. Nobody can reach it.</h2>
+        <p className="lead mt-3 max-w-xl text-[14px]">Six patterns we heard from every campus office — and why they persist without a knowledge platform.</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {PROBLEMS.map((p, i) => (
+            <div key={p.t} className="card card-hover card-pad">
+              <div className="flex items-start justify-between gap-2">
+                <span className="mono muted text-[11px]">0{i + 1}</span>
+                <span className="badge badge-red mono !text-[10px]">{p.tag}</span>
+              </div>
+              <div className="mt-3 text-[14.5px] font-semibold leading-snug">{p.t}</div>
+              <div className="muted mt-1.5 text-[13px] leading-relaxed">{p.d}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= SOLUTION ================= */}
+      <section id="solution" className="section">
         <div className="ticks card p-8 sm:p-12">
           <span className="tick tick-tl">+</span><span className="tick tick-tr">+</span>
           <span className="tick tick-bl">+</span><span className="tick tick-br">+</span>
-          <div className="grid items-center gap-8 lg:grid-cols-2">
-            <div>
-              <p className="eyebrow !text-[#e8b34b]">● Campus plan</p>
-              <h2 className="h2 mt-3">One workspace<br />per college</h2>
-              <p className="muted mt-3 max-w-sm text-[14px]">Unlimited departments. Full control.</p>
-              <ul className="mt-4 space-y-2 text-[13.5px]">
-                {["Own workspace + login", "Dept faculty access", "Cited scoped chat"].map((t) => (
-                  <li key={t} className="flex items-center gap-2"><span className="text-[#86efac]">✓</span>{t}</li>
-                ))}
-              </ul>
-              <p className="mono muted mt-3 text-[11px]">UPCOMING · clubs + support desks + self-host</p>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link href="/register" className="btn-primary btn-sm">Why colleges pick it →</Link>
-                <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm">See live demo</Link>
-              </div>
-            </div>
-            <div className="mx-auto w-full max-w-xs rounded-2xl border border-[#6b4d1a] bg-gradient-to-b from-[#1c1408] to-[#100c05] p-6">
-              <div className="mono text-[10px] tracking-[.18em] text-[#e8b34b]">CAMPUS LICENSE</div>
-              <div className="font-display mt-2 text-xl font-bold">CollegeMate Campus</div>
-              <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                {[["1+", "college"], ["∞", "depts"], ["cited", "chat"]].map(([a, b]) => (
-                  <div key={b}><div className="text-[15px] font-bold">{a}</div><div className="muted text-[11px]">{b}</div></div>
-                ))}
-              </div>
-              <div className="mt-4 flex items-baseline gap-2">
-                <span className="font-display text-2xl font-bold text-[#e8b34b]">Free</span>
-                <span className="muted text-[12px]">demo · custom later</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+          <p className="eyebrow !text-[#e8b34b]">Solution</p>
+          <h2 className="h2 mt-2 max-w-2xl">Why a scoped knowledge platform — and what changes</h2>
 
-      {/* ================= STATUS ================= */}
-      <section className="section">
-        <p className="eyebrow">System status</p>
-        <h2 className="h2 mt-2">Live data, not screenshots</h2>
-        <p className="lead mt-2 max-w-lg text-[14px]">Pulled from <span className="kbd">/api/health</span> on every page load.</p>
-        <div className="mt-5 grid gap-3 lg:grid-cols-3">
-          <div className="card card-pad">
-            <Stat value={stats.colleges} cap="college workspace live" />
-            <div className="divider mono muted mt-4 pt-3 text-[11.5px]">onboarded · approved · isolated</div>
+          <div className="mt-8 grid gap-3">
+            {WHY.map((w) => (
+              <div key={w.n} className="grid gap-2 rounded-xl border border-[#232329] bg-[#0d0d0f] p-5 sm:grid-cols-[64px_1fr] sm:gap-4">
+                <span className="mono text-[13px] font-bold text-[#e8b34b]">{w.n}</span>
+                <span>
+                  <span className="text-[15px] font-semibold">{w.t}</span>
+                  <span className="muted mt-1 block text-[13.5px] leading-relaxed">{w.d}</span>
+                </span>
+              </div>
+            ))}
           </div>
-          <div className="card card-pad">
-            <Stat value={stats.depts} cap="departments structured" />
-            <div className="divider mono muted mt-4 pt-3 text-[11.5px]">scoped faculty access</div>
+
+          <div className="divider mt-8 pt-6">
+            <p className="mono text-[11px] tracking-[.18em] text-[#e8b34b]">OUTCOMES</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {OUTCOMES.map(([a, b]) => (
+                <div key={a} className="rounded-xl border border-[#6b4d1a] bg-gradient-to-b from-[#1c1408] to-[#100c05] p-5 text-center">
+                  <div className="font-display text-xl font-bold text-[#e8b34b]">{a}</div>
+                  <div className="muted mt-1 text-[12px] leading-relaxed">{b}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="card card-pad">
-            <Stat value={stats.docs} cap="documents indexed" />
-            <div className="divider mono muted mt-4 pt-3 text-[11.5px]">cited in every answer</div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/register" className="btn-primary btn-sm">Bring this to your college →</Link>
+            <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm">Verify with the live demo</Link>
           </div>
         </div>
-        <p className="mono muted mt-3 flex items-center gap-2 text-[11px]"><span className="dot dot-pulse text-[#86efac]" aria-hidden="true" /> Live · refreshes on load</p>
       </section>
 
       {/* ================= COMPARE ================= */}
@@ -370,65 +287,6 @@ export default function Home() {
           <div className="flex justify-center pb-3">
             <Link href="/demo/mits-madanapalle" className="btn-primary btn-sm">Open the live demo →</Link>
           </div>
-        </div>
-      </section>
-
-      {/* ================= SCREENS ================= */}
-      <section className="section">
-        <p className="eyebrow text-center">Product tour</p>
-        <h2 className="h2 mt-2 text-center">What you&apos;re opening</h2>
-        <p className="muted mono mt-2 text-center text-[11.5px]">6 spaces · live routes, click any card to open it</p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Screen href="/dashboard" cap="Super hub">
-            {sk(90)}{sk(70)}{sk(82)}
-            <div className="flex gap-2 pt-1"><div className="h-6 flex-1 rounded-full bg-white" /><div className="h-6 flex-1 rounded-full border border-[#34343c]" /></div>
-          </Screen>
-          <Screen href="/mits-madanapalle" cap="College space">
-            <div className="flex gap-1.5">{["O", "D", "D", "C"].map((t, i) => (<div key={i} className="mv-chip mono flex-1 py-1 text-center text-[9px] text-[#a1a1aa]">{t}</div>))}</div>
-            {sk(88)}{sk(64)}
-          </Screen>
-          <Screen href="/auth" cap="Login / Register">
-            <div className="flex gap-1 rounded-full border border-[#2b2b31] p-1">
-              <div className="h-5 flex-1 rounded-full bg-white" /><div className="h-5 flex-1" />
-            </div>
-            {sk(75)}{sk(90)}
-          </Screen>
-          <Screen href="/faculty" cap="Faculty upload">
-            {sk(75)}
-            <div className="h-1.5 overflow-hidden rounded-full bg-[#222228]"><div className="h-full w-3/4 rounded-full bg-white" /></div>
-            {sk(92)}
-          </Screen>
-          <Screen href="/chat" cap="Scoped chat">
-            <div className="ml-auto w-3/4 rounded-lg rounded-br-sm bg-[#2b2b31] p-2">{sk(85)}</div>
-            <div className="w-5/6 rounded-lg rounded-bl-sm border border-[#2b2b31] p-2">{sk(95)}<div className="mono mt-1 text-[9px] text-[#86efac]">[fees.pdf · p.3 · CSE]</div></div>
-          </Screen>
-          <Screen href="/demo/mits-madanapalle" cap="Public demo">
-            {sk(95)}{sk(70)}{sk(82)}
-            <div className="flex gap-2 pt-1"><div className="h-6 flex-1 rounded-full bg-white" /><div className="h-6 flex-1 rounded-full border border-[#34343c]" /></div>
-          </Screen>
-        </div>
-      </section>
-
-      {/* ================= EXAMPLES ================= */}
-      <section className="section">
-        <p className="eyebrow text-center">Grounded answers</p>
-        <h2 className="h2 mt-2 text-center">Ask, get cited answers</h2>
-        <div className="mx-auto mt-6 grid max-w-4xl gap-3 sm:grid-cols-2">
-          {[
-            ["What is the minimum attendance requirement?", "75% — [regulations.pdf · p.24 · Attendance]", "Academic"],
-            ["Who leads the Cyber Security Club?", "Name + contact — [clubs.pdf · p.2 · Clubs]", "Clubs"],
-            ["How do I apply for a bonafide?", "Portal + 2 days — [admin.pdf · p.7 · Admin]", "Admin"],
-            ["Placement eligibility criteria?", "7.0 CGPA, no backlogs — [placements.xlsx · p.1]", "Placements"],
-          ].map(([q, a, src]) => (
-            <div key={q} className="card card-hover card-pad">
-              <div className="text-[14px] font-semibold">“{q}”</div>
-              <div className="muted mt-2 text-[13px]">{a}</div>
-              <div className="mt-3 flex items-center gap-2">
-                <span className="badge badge-green mono !text-[10px]">{src}</span>
-                <span className="mono muted text-[10.5px]">illustrative format</span>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
