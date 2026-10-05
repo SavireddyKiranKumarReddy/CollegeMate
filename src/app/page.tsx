@@ -101,6 +101,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#F1F0FD] via-white to-white" />
           <div className="absolute -left-24 top-0 h-96 w-72 bg-gradient-to-b from-[#FDEFD4] to-transparent opacity-70 blur-2xl" />
         </div>
+        <div className="bg-grid bg-grid-fade pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-16 pt-14 lg:grid-cols-[1.05fr_.95fr]">
           <div>
             <span className="badge badge-acc mono rise !text-[11px]">
