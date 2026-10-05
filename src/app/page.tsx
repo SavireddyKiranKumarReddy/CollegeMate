@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 const CMDS = [
@@ -39,44 +39,10 @@ const OUTCOMES = [
   ["Scoped", "department-level access and uploads"],
 ];
 
-function Stat({ value, cap }: { value: string; cap: string }) {
-  const loading = value === "…" || value === "—";
-  return (
-    <div>
-      {loading ? (
-        <div className="skeleton mx-auto h-7 w-12" aria-label="loading" />
-      ) : (
-        <div className="stat-num">{value}</div>
-      )}
-      <div className="stat-cap">{cap}</div>
-    </div>
-  );
-}
-
 export default function Home() {
   const [cmd, setCmd] = useState(0);
   const [copied, setCopied] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [stats, setStats] = useState({ colleges: "…", depts: "…", docs: "…" });
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const h = await fetch("/api/health").then((r) => r.json());
-        const colleges = h?.collegesCount ?? "—";
-        const list = await fetch("/api/colleges").then((r) => r.json()).catch(() => null);
-        const first = list?.colleges?.[0];
-        let depts = "—", docs = "—";
-        if (first) {
-          const d = await fetch(`/api/departments?college_id=${first.id}`).then((r) => r.json()).catch(() => null);
-          const dc = await fetch(`/api/documents?college_id=${first.id}`).then((r) => r.json()).catch(() => null);
-          depts = String(d?.departments?.length ?? 0);
-          docs = String(dc?.documents?.length ?? 0);
-        }
-        setStats({ colleges: String(colleges), depts, docs });
-      } catch {}
-    })();
-  }, []);
 
   async function copyCmd() {
     try {
@@ -107,23 +73,59 @@ export default function Home() {
           <Link href="/demo/mits-madanapalle" className="badge badge-gold mono !text-[11px]">
             <span className="dot dot-pulse" aria-hidden="true" /> Live demo running — MITS-Madanapalle
           </Link>
-          <h1 className="h1 mx-auto mt-5 max-w-3xl">AI-Powered College Knowledge Assistant</h1>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] font-medium leading-relaxed text-[#d4d4d8]">
-            <span className="hl">college-scoped</span> answers from verified docs — fees, cutoffs,
-            placements — with <span className="hl">citations on everything</span>, in{" "}
-            <span className="hl">separate workspaces</span>
+          <h1 className="h1 mx-auto mt-5 max-w-3xl">AI-Powered Knowledge Assistant for Colleges</h1>
+          <p className="mx-auto mt-4 max-w-xl text-[17px] font-semibold leading-relaxed">
+            Give every student instant access to trusted college information.
           </p>
+          <p className="mx-auto mt-3 max-w-2xl text-[14.5px] leading-relaxed text-[#d4d4d8]">
+            CollegeMate is an <span className="hl">AI-powered college knowledge assistant</span> that
+            delivers accurate, college-specific answers from your institution&apos;s{" "}
+            <span className="hl">verified documents, policies, notices, academic regulations, fees,
+            admissions, placements, and more</span> — with source citations for every response.
+          </p>
+          <p className="mono muted mt-4 text-[12px] tracking-wide">Built for Students · Faculty · Administrators</p>
+          <p className="mono muted mt-2 text-[11.5px]">Web · Mobile · API</p>
 
-          <div className="card-elevated mx-auto mt-7 max-w-xl p-5 text-left">
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <Stat value={stats.colleges} cap="colleges live" />
-              <Stat value={stats.depts} cap="departments" />
-              <Stat value={stats.docs} cap="documents" />
-            </div>
-            <div className="divider mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pt-3 text-[11.5px] muted">
-              <span className="mono">Web · Mobile · API</span>
-            </div>
-            <div className="cmdtabs mt-2 justify-center !border-0 !p-0">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/register" className="btn-primary">Register Your College</Link>
+            <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore Live Demo</Link>
+          </div>
+
+          <div className="card-elevated mx-auto mt-8 max-w-2xl p-6 text-left sm:p-8">
+            <h2 className="font-display text-xl font-bold tracking-tight">Ask. Find. Understand.</h2>
+            <p className="muted mt-2 text-[13.5px] leading-relaxed">
+              Students can ask questions in natural language and instantly find the information
+              they need — without searching through dozens of PDFs, websites, notices, or
+              internal documents.
+            </p>
+            <ul className="mt-4 grid gap-x-6 gap-y-2.5 text-[13.5px] sm:grid-cols-2">
+              {[
+                "Verified institutional knowledge",
+                "AI-powered search and answers",
+                "Source citations and document references",
+                "College-specific workspaces",
+                "24/7 availability",
+                "Secure, scalable architecture",
+              ].map((t) => (
+                <li key={t} className="flex items-center gap-2.5">
+                  <span className="text-[#86efac]" aria-hidden="true">✓</span>{t}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="card mx-auto mt-4 max-w-2xl p-6 text-left sm:p-8">
+            <p className="eyebrow !text-[#e8b34b]">Live college demo</p>
+            <h2 className="font-display mt-2 text-xl font-bold tracking-tight">Experience CollegeMate with MITS Madanapalle</h2>
+            <p className="muted mt-2 text-[13.5px] leading-relaxed">
+              Explore how a college-specific AI assistant can answer questions using institutional
+              knowledge and verified documents.
+            </p>
+            <Link href="/demo/mits-madanapalle" className="btn-primary btn-sm mt-4">Explore Live Demo</Link>
+          </div>
+
+          <div className="card mx-auto mt-4 max-w-2xl p-5 text-left">
+            <div className="cmdtabs justify-center !border-0 !p-0">
               {CMDS.map((c, i) => (
                 <button key={c.tab} onClick={() => setCmd(i)} className={`cmdtab ${cmd === i ? "cmdtab-active" : ""}`}>
                   {c.tab}
@@ -135,20 +137,7 @@ export default function Home() {
               <button onClick={copyCmd} className="cmdcopy">{copied ? "Copied" : "Copy"}</button>
             </div>
           </div>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
-            {["Students", "Faculty", "Admins", "Departments"].map((t) => (
-              <span key={t} className="badge mono !text-[11px]">{t}</span>
-            ))}
-            <span className="mono text-[11px] muted">+ live demo inside</span>
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Link href="/register" className="btn-primary">Register your college</Link>
-            <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
-            <Link href="/#problems" className="btn-ghost">Why it matters →</Link>
-          </div>
-          <p className="mono muted mt-2.5 text-[11.5px]">free demo · live workspace · no install</p>
+          <p className="mono muted mt-4 text-[11.5px]">Free Demo · Live Workspace · No Installation Required</p>
         </div>
       </section>
 
