@@ -1,10 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", domain: "", city: "", contact_email: "", notes: "" });
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    try {
+      const em = new URLSearchParams(window.location.search).get("email");
+      if (em) setForm((f) => ({ ...f, contact_email: em }));
+    } catch {}
+  }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
