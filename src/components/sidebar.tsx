@@ -16,7 +16,7 @@ export default function Sidebar({ title, sub, items }: { title: string; sub?: st
   return (
     <aside className="w-full shrink-0 md:w-60" aria-label="Section navigation">
       <div className="card overflow-hidden md:sticky md:top-24">
-        <div className="border-b border-[#201B13] px-4 py-3.5">
+        <div className="border-b border-[#1F1F1F] px-4 py-3.5">
           <div className="truncate text-[14px] font-semibold">{title}</div>
           {sub && <div className="mono muted mt-0.5 truncate text-[11px]">{sub}</div>}
         </div>
@@ -29,11 +29,11 @@ export default function Sidebar({ title, sub, items }: { title: string; sub?: st
                 href={it.href}
                 aria-current={active ? "page" : undefined}
                 className={`flex items-center justify-between gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-[13.5px] font-medium transition ${
-                  active ? "bg-[#F5EFE2] text-[#171310]" : "muted hover:bg-[#221B12] hover:text-[#F5EFE2]"
+                  active ? "bg-[#00E67A] text-[#04120A]" : "muted hover:bg-[#1C1C1C] hover:text-[#FFFFFF]"
                 }`}
               >
                 {it.label}
-                {it.tag && <span className={`mono text-[10.5px] ${active ? "text-[#171310]/60" : "muted"}`}>{it.tag}</span>}
+                {it.tag && <span className={`mono text-[10.5px] ${active ? "text-[#04120A]/70" : "muted"}`}>{it.tag}</span>}
               </Link>
             );
           })}

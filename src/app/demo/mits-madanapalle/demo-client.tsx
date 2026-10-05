@@ -76,7 +76,7 @@ export default function DemoClient() {
         <div className="eyebrow">Ask CollegeMate</div>
         <div className="mt-3 flex flex-wrap gap-2">
           {EXAMPLES.map((e) => (
-            <button key={e} onClick={() => ask(e)} className="badge mono !py-2 !text-[12px] hover:border-[#3D3525] hover:text-[#F5EFE2]">“{e}”</button>
+            <button key={e} onClick={() => ask(e)} className="badge mono !py-2 !text-[12px] hover:border-[#3D3D3D] hover:text-[#FFFFFF]">“{e}”</button>
           ))}
         </div>
         <div className="mt-4 space-y-2.5">

@@ -69,10 +69,10 @@ export default function Home() {
       {/* ================= HOME / HERO — asymmetric ================= */}
       <section id="home" className="section relative">
         <div className="dots dots-fade pointer-events-none absolute inset-0" />
-        <div className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E5A83B]/10 blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#00E67A]/10 blur-3xl" aria-hidden="true" />
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
           <div>
-            <Link href="/demo/mits-madanapalle" className="badge badge-gold mono rise !text-[11px]" style={{ animationDelay: "0ms" }}>
+            <Link href="/demo/mits-madanapalle" className="badge badge-acc mono rise !text-[11px]" style={{ animationDelay: "0ms" }}>
               <span className="dot dot-pulse" aria-hidden="true" /> Live demo running — MITS-Madanapalle
             </Link>
             <h1 className="h1 rise mt-5 max-w-xl" style={{ animationDelay: "70ms" }}>
@@ -103,8 +103,8 @@ export default function Home() {
             <div className="card-elevated overflow-hidden">
               <div className="mockbar">
                 <span className="mockdot" /><span className="mockdot" /><span className="mockdot" />
-                <span className="mono ml-2 text-[10px] text-[#6E6656]">collegemate / mits-madanapalle / chat</span>
-                <span className="mono ml-auto flex items-center gap-1.5 text-[10px] text-[#86EFAC]">
+                <span className="mono ml-2 text-[10px] text-[#737373]">collegemate / mits-madanapalle / chat</span>
+                <span className="mono ml-auto flex items-center gap-1.5 text-[10px] text-[#6EE7B7]">
                   <span className="dot dot-pulse" aria-hidden="true" />live
                 </span>
               </div>
@@ -189,7 +189,7 @@ export default function Home() {
             <div className="mt-4 flex flex-wrap gap-2">
               <span className="badge badge-green mono !text-[11px]">RAG-grounded</span>
               <span className="badge badge-blue mono !text-[11px]">workspace-scoped</span>
-              <span className="badge badge-gold mono !text-[11px]">cited</span>
+              <span className="badge badge-acc mono !text-[11px]">cited</span>
             </div>
           </div>
           <div className="card card-pad">
@@ -216,10 +216,10 @@ export default function Home() {
         <p className="eyebrow">Problems colleges face</p>
         <h2 className="h2 mt-2 max-w-2xl">The information exists. Nobody can reach it.</h2>
         <p className="lead mt-3 max-w-xl text-[14px]">Six patterns we heard from every campus office — and why they persist without a knowledge platform.</p>
-        <div className="mt-8 divide-y divide-[#201B13] border-y border-[#201B13]">
+        <div className="mt-8 divide-y divide-[#1F1F1F] border-y border-[#1F1F1F]">
           {PROBLEMS.map((p, i) => (
             <div key={p.t} className="grid gap-1.5 py-5 sm:grid-cols-[56px_1fr_auto] sm:items-baseline sm:gap-5">
-              <span className="mono text-[13px] font-bold text-[#E5A83B]">0{i + 1}</span>
+              <span className="mono text-[13px] font-bold text-[#00E67A]">0{i + 1}</span>
               <span>
                 <span className="text-[15.5px] font-semibold tracking-tight">{p.t}</span>
                 <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{p.d}</span>
@@ -235,13 +235,13 @@ export default function Home() {
         <div className="ticks card p-8 sm:p-12">
           <span className="tick tick-tl">+</span><span className="tick tick-tr">+</span>
           <span className="tick tick-bl">+</span><span className="tick tick-br">+</span>
-          <p className="eyebrow !text-[#E5A83B]">Solution</p>
+          <p className="eyebrow !text-[#00E67A]">Solution</p>
           <h2 className="h2 mt-2 max-w-2xl">Why a scoped knowledge platform — and what changes</h2>
 
           <div className="mt-8 grid gap-3">
             {WHY.map((w) => (
-              <div key={w.n} className="grid gap-2 rounded-xl border border-[#2A241A] bg-[#100D09] p-5 sm:grid-cols-[64px_1fr] sm:gap-4">
-                <span className="mono text-[13px] font-bold text-[#E5A83B]">{w.n}</span>
+              <div key={w.n} className="grid gap-2 rounded-xl border border-[#2E2E2E] bg-[#0C0C0C] p-5 sm:grid-cols-[64px_1fr] sm:gap-4">
+                <span className="mono text-[13px] font-bold text-[#00E67A]">{w.n}</span>
                 <span>
                   <span className="text-[15px] font-semibold">{w.t}</span>
                   <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{w.d}</span>
@@ -251,11 +251,11 @@ export default function Home() {
           </div>
 
           <div className="divider mt-8 pt-6">
-            <p className="mono text-[11px] tracking-[.18em] text-[#E5A83B]">OUTCOMES</p>
+            <p className="mono text-[11px] tracking-[.18em] text-[#00E67A]">OUTCOMES</p>
             <div className="mt-2 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {OUTCOMES.map(([a, b]) => (
-                <div key={a} className="border-t-2 border-[#E5A83B] pt-4">
-                  <div className="font-display text-2xl font-bold tracking-tight text-[#E5A83B]">{a}</div>
+                <div key={a} className="border-t-2 border-[#00E67A] pt-4">
+                  <div className="font-display text-2xl font-bold tracking-tight text-[#00E67A]">{a}</div>
                   <div className="muted mt-1 max-w-[65ch] text-[12.5px] leading-relaxed">{b}</div>
                 </div>
               ))}
@@ -342,7 +342,7 @@ export default function Home() {
               </div>
             </div>
             <div className="card-elevated p-5">
-              <p className="mono text-[11px] tracking-[.14em] text-[#E5A83B]">GET STARTED IN ONE COMMAND</p>
+              <p className="mono text-[11px] tracking-[.14em] text-[#00E67A]">GET STARTED IN ONE COMMAND</p>
               <div className="cmdtabs mt-3 justify-start !border-0 !p-0">
                 {CMDS.map((c, i) => (
                   <button key={c.tab} onClick={() => setCmd(i)} className={`cmdtab ${cmd === i ? "cmdtab-active" : ""}`}>
