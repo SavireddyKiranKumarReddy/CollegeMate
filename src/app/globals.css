@@ -41,7 +41,10 @@ html, body {
 
 body {
   background-image:
+    linear-gradient(to right, rgba(80, 70, 229, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(80, 70, 229, 0.055) 1px, transparent 1px),
     radial-gradient(ellipse 60% 40% at 50% -5%, rgba(80, 70, 229, 0.07), transparent 70%);
+  background-size: 44px 44px, 44px 44px, auto;
   background-attachment: fixed;
   min-height: 100vh;
 }
@@ -293,7 +296,7 @@ select.input option { background: var(--panel); }
 .cmp th { color: var(--muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; }
 .cmp tbody tr { transition: background .12s; }
 .cmp tbody tr:hover { background: rgba(80, 70, 229, 0.03); }
-.cmp td:first-child { color: var(--muted); }
+.cmp td:first-child { color: var(--muted); white-space: normal; }
 .cmp td.hlcol { color: var(--text); font-weight: 600; }
 
 /* faq pills */
@@ -399,15 +402,6 @@ select.input option { background: var(--panel); }
 /* ask chips */
 .chip { transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s; }
 .chip:hover { background: var(--acc); border-color: var(--acc); color: #fff; transform: translateY(-1px); }
-
-/* problem cards on indigo */
-.prob-card { transition: background 0.2s, transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
-.prob-card:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(10, 10, 40, 0.35);
-}
 
 /* compare rows */
 .cmp-row { transition: background 0.12s; }

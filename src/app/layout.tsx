@@ -78,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main id="main-content" className="mx-auto max-w-7xl px-6">{children}</main>
         <footer className="mx-auto max-w-7xl px-6 pb-8 pt-4">
-          <div className="border-t border-[#E6E5F1] bg-[#F7F7FC] pt-8">
+          <div className="border-t border-[#E6E5F1] pt-8">
             <div className="grid gap-8 px-2 md:grid-cols-[1.4fr_1fr_1fr]">
               <div>
                 <div className="flex items-center gap-2">

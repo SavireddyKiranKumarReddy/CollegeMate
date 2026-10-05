@@ -193,23 +193,24 @@ export default function Home() {
       </section>
 
       {/* ================= PROBLEM ================= */}
-      <section id="problem" className="scroll-mt-20 bg-[#4F46E5]">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-          <p className="eyebrow rv !text-[#C7C5F5]">The problem</p>
-          <h2 className="h2 rv mt-3 max-w-2xl !text-white">Students can&apos;t find the information their own college already has.</h2>
-          <p className="rv mt-3 max-w-2xl text-[14px] leading-relaxed text-[#D8D7F2]">
-            Survey after survey confirms it: finding information is among students&apos; top
-            frustrations with college websites — info is scattered, incomplete, and hard to navigate.
-          </p>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {PROBLEMS.map((p, i) => (
-              <div key={p.t} className="prob-card rv rounded-xl border border-white/15 bg-white/[0.08] p-5 backdrop-blur-sm" data-d={i} style={{ transitionDelay: `${i * 90}ms` }}>
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 text-white">{p.icon}</span>
-                <div className="mt-4 text-[14.5px] font-bold text-white">{p.t}</div>
-                <div className="mt-1.5 text-[12.5px] leading-relaxed text-[#D8D7F2]">{p.d}</div>
+      <section id="problem" className="section scroll-mt-28">
+        <p className="eyebrow rv !text-[#5046E5]">The problem</p>
+        <h2 className="h2 rv mt-3 max-w-2xl">Students can&apos;t find the information their own college already has.</h2>
+        <p className="muted rv mt-3 max-w-2xl text-[14px] leading-relaxed">
+          Survey after survey confirms it: finding information is among students&apos; top
+          frustrations with college websites — info is scattered, incomplete, and hard to navigate.
+        </p>
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {PROBLEMS.map((p, i) => (
+            <div key={p.t} className="card card-hover rv group p-5" data-d={i} style={{ transitionDelay: `${i * 90}ms` }}>
+              <div className="flex items-start justify-between">
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EEEDFD] text-[#5046E5] transition-transform group-hover:scale-110">{p.icon}</span>
+                <span className="mono text-[12px] font-bold text-[#C6C5D9]">0{i + 1}</span>
               </div>
-            ))}
-          </div>
+              <div className="mt-4 text-[14.5px] font-bold">{p.t}</div>
+              <div className="muted mt-1.5 text-[12.5px] leading-relaxed">{p.d}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -236,15 +237,15 @@ export default function Home() {
       </section>
 
       {/* ================= COMPARE ================= */}
-      <section id="compare" className="scroll-mt-20 bg-[#F7F7FC]">
-        <div className="mx-auto max-w-7xl px-6 py-16 text-center sm:py-20">
+      <section id="compare" className="section scroll-mt-28">
+        <div className="text-center">
           <p className="eyebrow rv !text-[#5046E5]">Compare</p>
           <h2 className="h2 rv mx-auto mt-3 max-w-xl">Why not just buy a university chatbot?</h2>
           <p className="muted rv mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed">
             Existing players like Ivy.ai, Ocelot and AdmitHub serve big universities well — but
             they&apos;re priced and paced for enterprise. Most colleges never get there.
           </p>
-          <div className="card rv mx-auto mt-8 max-w-4xl overflow-hidden !rounded-2xl text-left">
+          <div className="card rv mx-auto mt-8 max-w-4xl overflow-hidden !rounded-2xl text-left shadow-[0_8px_30px_rgba(23,23,46,0.06)]">
             <div className="overflow-x-auto">
               <table className="cmp min-w-[680px] border-collapse">
                 <colgroup>
