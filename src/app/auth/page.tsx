@@ -8,7 +8,7 @@ type Tab = "login" | "signup" | "register";
 export default function Auth() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("login");
-  const [email, setEmail] = useState("kiransavireddy@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [form, setForm] = useState({ name: "", domain: "", city: "", contact_email: "", notes: "" });
   const [msg, setMsg] = useState("");
@@ -93,10 +93,12 @@ export default function Auth() {
       <h1 className="h2 mt-2">Login / Register</h1>
       <p className="lead mt-2 text-[14px]">One page, two actions. Login with assigned email, or register a new college.</p>
 
-      <div className="card mt-5 flex gap-1 p-1.5">
+      <div className="card mt-5 flex gap-1 p-1.5" role="tablist" aria-label="Access options">
         {(["login", "signup", "register"] as Tab[]).map((t) => (
           <button
             key={t}
+            role="tab"
+            aria-selected={tab === t}
             onClick={() => { setTab(t); setMsg(""); }}
             className={`flex-1 rounded-lg px-4 py-2.5 text-[14px] font-semibold transition ${
               tab === t ? "bg-white text-black" : "muted hover:text-white"
@@ -120,7 +122,7 @@ export default function Auth() {
           <button onClick={signIn} disabled={busy || !email || !password} className="btn-primary w-full">
             {busy ? "Logging in…" : "Login"}
           </button>
-          <p className="muted text-[12.5px]">Super admin: kiransavireddy@gmail.com · Faculty: use granted email.</p>
+          <p className="muted text-[12.5px]">Use the email your admin granted access to.</p>
         </div>
       ) : null}
       {tab === "signup" ? (
@@ -166,7 +168,11 @@ export default function Auth() {
           <button className="btn-primary w-full" disabled={busy}>{busy ? "Submitting…" : "Submit for approval"}</button>
         </form>
       ) : null}
-      {msg && <p className="mt-3 text-[13px] muted leading-relaxed">{msg}</p>}
+      {msg && (
+        <p role="status" className={`msg mt-3 ${/failed|error/i.test(msg) ? "msg-err" : /redirecting|welcome|logged in|created|submitted/i.test(msg) ? "msg-ok" : "msg-info"}`}>
+          {msg}
+        </p>
+      )}
     </div>
   );
 }

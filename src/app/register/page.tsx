@@ -16,7 +16,7 @@ export default function Register() {
     setLoading(false);
     if (!res.ok) setMsg("Error: " + (j.error || "failed"));
     else {
-      setMsg("Submitted as pending. Super admin (kiransavireddy@gmail.com) will approve and assign your admin.");
+      setMsg("Submitted as pending. A super admin will approve it and assign your admin.");
       setForm({ name: "", domain: "", city: "", contact_email: "", notes: "" });
     }
   }
@@ -50,7 +50,11 @@ export default function Register() {
           <textarea className="input" rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Departments, intake, website URL…" />
         </div>
         <button className="btn-primary w-full" disabled={loading}>{loading ? "Submitting…" : "Submit for approval"}</button>
-        {msg && <p className="text-[13px] muted leading-relaxed">{msg}</p>}
+        {msg && (
+          <p role="status" className={`msg ${/^error/i.test(msg) ? "msg-err" : "msg-ok"}`}>
+            {msg}
+          </p>
+        )}
       </form>
     </div>
   );
