@@ -61,7 +61,7 @@ export default function Login() {
         </button>
         {msg && <p className="text-[13px] muted leading-relaxed">{msg}</p>}
         <div className="divider pt-4 text-[13px] muted">
-          New college? <Link href="/register" className="font-semibold text-[#2E4BFF] underline">Register here</Link>
+          New college? <Link href="/register" className="font-semibold text-[#5046E5] underline">Register here</Link>
         </div>
       </div>
     </div>

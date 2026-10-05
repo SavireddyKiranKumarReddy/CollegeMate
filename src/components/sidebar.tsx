@@ -29,7 +29,7 @@ export default function Sidebar({ title, sub, items }: { title: string; sub?: st
                 href={it.href}
                 aria-current={active ? "page" : undefined}
                 className={`flex items-center justify-between gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-[13.5px] font-medium transition ${
-                  active ? "bg-[#2E4BFF] text-white" : "muted hover:bg-[#ECE8DB] hover:text-[#0E1B2E]"
+                  active ? "bg-[#5046E5] text-white" : "muted hover:bg-[#EFEEF9] hover:text-[#17172E]"
                 }`}
               >
                 {it.label}

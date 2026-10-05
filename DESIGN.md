@@ -1,52 +1,46 @@
 # CollegeMate — DESIGN.md
 
-Aesthetic: **light institutional SaaS** — Bricolage Grotesque display +
-Outfit body + JetBrains Mono operational labels. Off-white paper ground,
-white surfaces, thin hairlines, one blue/indigo accent `#2E4BFF`. Generous
-whitespace, editorial numbered rows, product-as-hero. No Inter primary,
-no centered hero, no 3-card rows, no filler copy.
+Aesthetic: **white institutional SaaS** — Sora display + Outfit body +
+JetBrains Mono labels. Pure-white canvas, lavender hairlines, indigo
+primary `#5046E5` + amber warmth `#F59E0B`. Chat-first hero, editorial
+rows, product-as-hero. (Mirrors the information architecture of the
+reference Base44 build; all copy is original.)
 
-## Palette (single accent + paper neutrals)
+## Palette
 
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#F6F5F1` | page ground + faint indigo hero glow |
-| `--panel` / `--panel-2` | `#FFFFFF` | cards (flat, thin borders) |
-| `--border` / soft / strong | `#E4DFD3` / `#EDE9DD` / `#D5CFC0` | hairlines |
-| `--text` | `#0E1B2E` | dark navy type |
-| `--muted` / `--muted-2` | `#5A6B84` / `#8A97A9` | secondary / tertiary |
-| `--acc` | `#2E4BFF` | THE accent — primary buttons, active pills, numbers, focus rings |
-| status only | green `#15803D` / amber `#92400E` / red `#B42318` / blue `#1F3AE0` | light-tint badges, never decoration |
-| `--shadow-pop` | `0 12px 32px rgba(16,27,46,.08)` | soft neutral shadows only |
+| `--bg` | `#FFFFFF` | page ground + faint indigo hero glow |
+| `--bg-soft` / `--panel-2` | `#F5F4FC` | tinted strips, chips, secondary surfaces |
+| `--panel` | `#FFFFFF` | cards (flat, thin borders) |
+| `--border` / soft / strong | `#E6E5F1` / `#EFEFF7` / `#D3D2E6` | hairlines |
+| `--text` | `#17172E` | dark navy-ink type |
+| `--muted` / `--muted-2` | `#5F5F7D` / `#8F8FA8` | secondary / tertiary |
+| `--acc` | `#5046E5` | THE accent — primary buttons, active pills, numbers, focus rings |
+| `--warm` | `#F59E0B` | sparing warmth (badges, highlights) |
+| status only | green `#15803D` / amber `#92400E` / red `#B42318` | light-tint badges |
 
 ## Type
 
-- Display: Bricolage Grotesque (700, tracking −0.022…−0.025em).
+- Display: Sora (700, tracking −0.022…−0.025em).
 - Body: Outfit 400–600, line-height ≥ 1.5, prose capped at 65ch.
 - Mono: JetBrains Mono for eyebrows, flows, citations, status.
 
-## Layout signatures
+## Landing architecture (one question per section)
 
-- Containers `max-w-7xl`. Grid, never flex math. Mobile → single column.
-- Landing tells one story per section: hero → strip → problem → transition
-  → solution → how-it-works → differentiators → users → demo → compare →
-  security → FAQ → CTA.
-- Problems/users/security = numbered divide-y rows. Steps = top-rule strip.
-  Differentiators = 2×2 with distinct mini-visuals each.
-- One vocabulary rule: each concept (cited, workspace, RAG, scoped) is
-  explained once, in its own section — never repeated as decoration.
-- Entrance motion: `.rise` (translateY 14px + opacity, spring-ish
-  cubic-bezier, staggered delays). `prefers-reduced-motion` kills it.
+Hero (open chat, no app/account) → coverage strip → shy-student problem →
+college-builds-brain (workspace → departments → gap loop) → no-app strip →
+why (cited/owned/gap-aware/isolated) → compare → FAQ → CTA.
 
 ## Rules for future work
 
-1. New sections: rows/strips/bento — never N equal cards, never centered hero.
-2. New colors: paper neutrals + indigo only; statuses keep light tints.
-3. New copy: concrete verbs, messy-specific data; banned: Elevate/Seamless/
-   Unleash/Next-Gen, Acme-style names, round fake stats, emojis, model names
-   in marketing.
+1. New sections: rows/strips — never N equal cards, never centered hero.
+2. New colors: white/lavender + indigo only; amber sparingly.
+3. New copy: concrete, original wording; banned: Elevate/Seamless/Unleash/
+   Next-Gen, Acme-style names, round fake stats, emojis, model names in
+   marketing.
 4. New interactive UI: skeleton + empty + error states, `aria-expanded` /
    `aria-selected` / `role=status` where applicable, `:focus-visible` free
    via globals.
 
-Last updated: 2026-10-05 (v9 light institutional).
+Last updated: 2026-10-05 (v10 spirited structure).
