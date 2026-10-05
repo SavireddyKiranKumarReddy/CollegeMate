@@ -175,8 +175,8 @@ export default function Home() {
 
       {/* ================= PROBLEM ================= */}
       <section id="problem" className="section scroll-mt-20">
-        <h2 className="h2 rv max-w-xl">Finding answers shouldn&apos;t be the hard part.</h2>
-        <div className="mt-8 divide-y divide-[#EFE6D4] border-y border-[#EFE6D4]">
+        <h2 className="h2 rv mx-auto max-w-2xl text-center">Finding answers shouldn&apos;t be the hard part.</h2>
+        <div className="mx-auto mt-8 max-w-3xl divide-y divide-[#EFE6D4] border-y border-[#EFE6D4]">
           {PROBLEMS.map((p) => (
             <div key={p.n} className="rv grid gap-1.5 py-5 sm:grid-cols-[56px_1fr] sm:gap-5">
               <span className="mono text-[13px] font-bold text-[#16130C]">{p.n}</span>
@@ -191,8 +191,8 @@ export default function Home() {
 
       {/* ================= SOLUTION ================= */}
       <section id="solution" className="section scroll-mt-20">
-        <h2 className="h2 rv max-w-xl">One knowledge layer for the entire college.</h2>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <h2 className="h2 rv mx-auto max-w-2xl text-center">One knowledge layer for the entire college.</h2>
+        <div className="mx-auto mt-8 grid max-w-4xl gap-3 sm:grid-cols-2">
           {SOLUTIONS.map((s, i) => (
             <div key={s.n} className="card rv card-hover border p-5" data-d={i} style={{ transitionDelay: `${(i % 2) * 90}ms` }}>
               <span className="mono text-[12px] font-bold text-[#9A8F7C]">{s.n}</span>
