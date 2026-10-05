@@ -25,6 +25,10 @@ export const metadata: Metadata = {
       "One trusted place for academic, administrative, departmental and support information.",
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 function Nav() {
@@ -32,6 +36,7 @@ function Nav() {
     <div className="mx-auto max-w-7xl px-6">
       <header className="flex items-center justify-between gap-3 border-b border-[#EFE6D4] py-4">
         <Link href="/" className="flex items-center gap-2" aria-label="CollegeMate home">
+          <img src="/logo.png" alt="CollegeMate logo" width={30} height={30} className="rounded-lg" />
           <span className="font-display text-[17px] font-black tracking-tight">CollegeMate</span>
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
@@ -81,7 +86,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="border-t border-[#E6E5F1] pt-8">
             <div className="grid gap-8 px-2 md:grid-cols-[1.4fr_1fr_1fr]">
               <div>
-                <span className="font-display text-[17px] font-black tracking-tight">CollegeMate</span>
+                <Link href="/" className="flex items-center gap-2" aria-label="CollegeMate home">
+                  <img src="/logo.png" alt="CollegeMate logo" width={30} height={30} className="rounded-lg" />
+                  <span className="font-display text-[17px] font-black tracking-tight">CollegeMate</span>
+                </Link>
                 <div className="mt-3 flex gap-2">
                   {[
                     { href: "/chat", label: "Student chat", icon: <path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z" /> },
