@@ -346,8 +346,8 @@ select.input option { background: var(--panel); }
   background-attachment: fixed;
 }
 .bg-grid-fade {
-  -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 25%, black 25%, transparent 78%);
-  mask-image: radial-gradient(ellipse 90% 85% at 50% 25%, black 25%, transparent 78%);
+  -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
 }
 
 /* scroll reveal — transform + opacity only */
