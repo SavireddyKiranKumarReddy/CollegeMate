@@ -35,20 +35,25 @@ function Nav() {
           <span className="font-display text-[17px] font-black tracking-tight">CollegeMate</span>
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-          <Link href="/" className="navlink navlink-active">Home</Link>
-          <Link href="/#why" className="navlink">Why us</Link>
-          <Link href="/demo/mits-madanapalle" className="navlink">Demo</Link>
+          <Link href="/#home" className="navlink">Home</Link>
+          <Link href="/#about" className="navlink">About</Link>
+          <Link href="/#problem" className="navlink">Problem</Link>
+          <Link href="/#solution" className="navlink">Solution</Link>
+          <Link href="/#compare" className="navlink">Compare</Link>
           <Link href="/#faq" className="navlink">FAQs</Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Link href="/register" className="btn-primary btn-sm">Sign up</Link>
+          <Link href="/#cta" className="btn-primary btn-sm">Get started</Link>
           <details className="relative lg:hidden">
             <summary className="btn-ghost btn-sm cursor-pointer list-none" aria-label="Open menu">☰</summary>
             <div className="card card-pad absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 p-2">
-              <Link href="/" className="navlink">Home</Link>
-              <Link href="/#why" className="navlink">Why us</Link>
-              <Link href="/demo/mits-madanapalle" className="navlink">Demo</Link>
+              <Link href="/#home" className="navlink">Home</Link>
+              <Link href="/#about" className="navlink">About</Link>
+              <Link href="/#problem" className="navlink">Problem</Link>
+              <Link href="/#solution" className="navlink">Solution</Link>
+              <Link href="/#compare" className="navlink">Compare</Link>
               <Link href="/#faq" className="navlink">FAQs</Link>
+              <Link href="/#cta" className="navlink">Get started</Link>
             </div>
           </details>
         </div>
@@ -92,19 +97,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div>
                 <div className="text-[13px] font-extrabold">Explore</div>
                 <div className="mt-3 flex flex-col gap-2 text-[13px]">
-                  <Link href="/#why" className="muted transition-colors hover:text-[#16130C]">Why us</Link>
-                  <Link href="/demo/mits-madanapalle" className="muted transition-colors hover:text-[#16130C]">Demo</Link>
+                  <Link href="/#home" className="muted transition-colors hover:text-[#16130C]">Home</Link>
+                  <Link href="/#about" className="muted transition-colors hover:text-[#16130C]">About</Link>
+                  <Link href="/#problem" className="muted transition-colors hover:text-[#16130C]">Problem</Link>
+                  <Link href="/#solution" className="muted transition-colors hover:text-[#16130C]">Solution</Link>
                   <Link href="/#compare" className="muted transition-colors hover:text-[#16130C]">Compare</Link>
                   <Link href="/#faq" className="muted transition-colors hover:text-[#16130C]">FAQs</Link>
                 </div>
               </div>
               <div>
-                <div className="text-[13px] font-extrabold">For colleges</div>
+                <div className="text-[13px] font-extrabold">Get started</div>
                 <div className="mt-3 flex flex-col gap-2 text-[13px]">
-                  <Link href="/register" className="muted transition-colors hover:text-[#16130C]">Register</Link>
-                  <Link href="/college" className="muted transition-colors hover:text-[#16130C]">College admin</Link>
-                  <Link href="/faculty" className="muted transition-colors hover:text-[#16130C]">Faculty</Link>
-                  <Link href="/auth" className="muted transition-colors hover:text-[#16130C]">Login</Link>
+                  <Link href="/#cta" className="muted transition-colors hover:text-[#16130C]">Register</Link>
+                  <Link href="/login" className="muted transition-colors hover:text-[#16130C]">Admin login</Link>
                 </div>
               </div>
             </div>

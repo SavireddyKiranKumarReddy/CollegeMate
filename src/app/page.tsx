@@ -3,21 +3,27 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const COVERAGE = ["EXAMS", "FEES", "HOSTEL", "PLACEMENTS", "CLUBS", "CONTACTS"];
-
-const AUDIENCES = [
-  { t: "Students", d: "Ask anything in plain language and get sourced answers — no queues, no office visits, no shyness.", href: "/chat", tint: "tint-lav", btn: "bg-[#6C63F6] text-white", tag: "ask" },
-  { t: "Faculty & Departments", d: "Publish and maintain your department's knowledge from one dashboard. Updates go live instantly.", href: "/faculty", tint: "tint-cream", btn: "bg-[#F7B500] text-[#16130C]", tag: "manage" },
-  { t: "Administrators", d: "One controlled knowledge layer per college, with visibility into gaps and unanswered questions.", href: "/college", tint: "tint-pink", btn: "bg-[#F0619C] text-white", tag: "control" },
+const PROBLEMS = [
+  { n: "01", t: "Scattered information", d: "Fees in PDFs, rules in notices, contacts in spreadsheets. Nobody knows the current truth." },
+  { n: "02", t: "Repeated questions", d: "Staff answer the same attendance, certificate and fee questions every single day." },
+  { n: "03", t: "Generic AI guesses", d: "Public chatbots answer confidently from the open internet — not your college's actual rules." },
+  { n: "04", t: "No source, no trust", d: "Without the original document behind an answer, even a correct answer is hard to trust." },
 ];
 
-const CAPABILITIES = [
-  { t: "Cited answers", d: "Every response names its document and department.", bg: "bg-[#6C63F6]", tint: "tint-lav", icon: <path d="M6 2h8l4 4v16H6V2Z" /> },
-  { t: "Open chat", d: "No app, no account, no queue for students.", bg: "bg-[#6C63F6]", tint: "tint-lav", icon: <path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z" /> },
-  { t: "Department scopes", d: "Each department owns and updates its section.", bg: "bg-[#F0619C]", tint: "tint-pink", icon: <><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" /></> },
-  { t: "Gap insights", d: "Unanswered questions surface straight to admins.", bg: "bg-[#F0619C]", tint: "tint-pink", icon: <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" /> },
-  { t: "College workspaces", d: "Isolated knowledge per institution, always.", bg: "bg-[#F7B500]", tint: "tint-cream", icon: <path d="M12 3 3 8l9 5 9-5-9-5Z" /> },
-  { t: "Always available", d: "Answers on the website, 24/7, in your languages.", bg: "bg-[#F7B500]", tint: "tint-cream", icon: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /></> },
+const SOLUTIONS = [
+  { n: "01", t: "One knowledge base", d: "Approved academic, administrative, departmental and support information in one searchable system." },
+  { n: "02", t: "Answers with sources", d: "Every response names the document and department it came from — nothing made up." },
+  { n: "03", t: "Departments stay in control", d: "Each department publishes its own knowledge and updates it anytime from one dashboard." },
+  { n: "04", t: "Honest fallbacks", d: "When knowledge runs out, students get a verified contact — never a guess." },
+];
+
+const COMPARE: [string, string, string][] = [
+  ["College-specific knowledge", "✓", "—"],
+  ["Your institutional documents", "✓", "—"],
+  ["Source citations", "✓", "Limited"],
+  ["Department knowledge", "✓", "—"],
+  ["No login for students", "✓", "✓"],
+  ["Controlled knowledge scope", "✓", "—"],
 ];
 
 const QA_SETS: { q: string; a: string; cite: string; tint: string }[][] = [
@@ -28,7 +34,7 @@ const QA_SETS: { q: string; a: string; cite: string; tint: string }[][] = [
   ],
   [
     { q: "What is the placement eligibility criteria?", a: "7.0 CGPA with no active backlogs for most visiting recruiters.", cite: "placements.xlsx · p.1", tint: "tint-lav" },
-    { q: "What are the library timings?", a: "Open 9am–8pm on all working days, with extended hours during examinations.", cite: "library-notice.pdf · p.1", tint: "tint-pink" },
+    { q: "What are the library timings?", a: "Open 9am–8pm on all working days, extended hours during examinations.", cite: "library-notice.pdf · p.1", tint: "tint-pink" },
     { q: "Which clubs can I join this semester?", a: "12 active clubs including Cyber Security, Robotics, Photography and NSS.", cite: "clubs.pdf · p.2", tint: "tint-cream" },
   ],
 ];
@@ -69,9 +75,9 @@ export default function Home() {
     })();
   }, []);
 
-  function goRegister(e?: string) {
-    const v = (e ?? email).trim();
-    router.push(v ? `/register?email=${encodeURIComponent(v)}` : "/register");
+  function goRegister(v: string) {
+    const t = v.trim();
+    router.push(t ? `/register?email=${encodeURIComponent(t)}` : "/register");
   }
 
   const jsonLd = {
@@ -87,13 +93,11 @@ export default function Home() {
     <div className="page !pt-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden">
+      {/* ================= HOME ================= */}
+      <section id="home" className="relative overflow-hidden scroll-mt-20">
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-12 lg:grid-cols-[1.05fr_.95fr]">
           <div>
-            <h1 className="h1 rise max-w-xl">
-              College answers, one question away.
-            </h1>
+            <h1 className="h1 rise max-w-xl">College answers, one question away.</h1>
             <p className="muted rise mt-4 max-w-md text-[14.5px] leading-relaxed" style={{ animationDelay: "100ms" }}>
               Your college&apos;s official knowledge — exams, fees, hostel, placements, clubs —
               answered instantly in one open chat, with the source behind every answer.
@@ -101,7 +105,7 @@ export default function Home() {
             <form
               className="rise mt-6 flex max-w-md gap-2"
               style={{ animationDelay: "180ms" }}
-              onSubmit={(e) => { e.preventDefault(); goRegister(); }}
+              onSubmit={(e) => { e.preventDefault(); goRegister(email); }}
             >
               <input
                 className="input !rounded-full !bg-white"
@@ -114,7 +118,7 @@ export default function Home() {
             <div className="rise mt-7 flex gap-8" style={{ animationDelay: "260ms" }}>
               {[[stats.colleges, "Colleges live"], [stats.depts, "Departments"], [stats.docs, "Documents indexed"]].map(([v, c]) => (
                 <div key={c}>
-                  <div className="font-display text-[22px] font-black tracking-tight">{v === "…" ? "…" : v}</div>
+                  <div className="font-display text-[22px] font-black tracking-tight">{v}</div>
                   <div className="muted text-[11.5px]">{c}</div>
                 </div>
               ))}
@@ -123,7 +127,6 @@ export default function Home() {
 
           <div className="rise relative" style={{ animationDelay: "160ms" }}>
             <span className="absolute -top-6 right-10 select-none text-[28px]" aria-hidden="true">✦</span>
-            <span className="absolute right-4 top-16 select-none text-[14px] text-[#9A8F7C]" aria-hidden="true">✦</span>
             <div className="arch mx-auto max-w-sm p-6 pt-10">
               <div className="card-elevated float-soft overflow-hidden !rounded-2xl">
                 <div className="mockbar">
@@ -142,7 +145,6 @@ export default function Home() {
                   <div className="chat-msg flex w-fit items-center gap-1.5 rounded-2xl rounded-bl-md bg-[#F4F0E4] px-3.5 py-2.5 text-[13px] text-[#9A8F7C]" style={{ animationDelay: "1.2s" }}>
                     <span className="typing" aria-hidden="true"><span /><span /><span /></span> thinking…
                   </div>
-                  <Link href="/demo/mits-madanapalle" className="btn-primary btn-sm w-full">Ask the demo bot</Link>
                 </div>
               </div>
             </div>
@@ -150,80 +152,102 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= WORDMARK STRIP ================= */}
-      <section aria-label="Coverage" className="border-y border-[#EFE6D4] bg-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6 py-5">
-          {COVERAGE.map((c) => (
-            <span key={c} className="font-display text-[15px] font-extrabold tracking-wide text-[#B4A88F]">{c}</span>
-          ))}
-        </div>
-      </section>
-
-      {/* ================= AUDIENCES ================= */}
-      <section id="why" className="section scroll-mt-20">
-        <h2 className="h2 rv mx-auto max-w-xl text-center">Made for everyone on campus</h2>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {AUDIENCES.map((a, i) => (
-            <div key={a.t} className={`card rv border p-5 ${a.tint}`} data-d={i} style={{ transitionDelay: `${i * 90}ms` }}>
-              <div className="text-[15px] font-extrabold">{a.t}</div>
-              <div className="muted mt-1.5 min-h-16 text-[13px] leading-relaxed">{a.d}</div>
-              <Link href={a.href} className={`btn-tint mt-4 ${a.btn}`}>Open {a.tag} →</Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ================= ENGAGE ================= */}
-      <section className="section">
-        <div className="grid items-center gap-10 lg:grid-cols-[.9fr_1.1fr]">
-          <div className="rv relative mx-auto w-full max-w-xs">
-            <div className="arch p-6 pt-10">
-              <div className="card-elevated !rounded-2xl p-4">
-                <p className="mono text-[10px] tracking-[.14em] text-[#6E6455]">GROUNDED ANSWER</p>
-                <p className="mt-2 text-[14px] font-bold leading-snug">75% attendance needed in each subject.</p>
-                <div className="mt-3 space-y-1.5">
-                  <div className="badge badge-green mono !text-[10px]">✓ cited</div>
-                  <div className="badge mono !text-[10px]">regulations.pdf · p.24</div>
-                </div>
-                <div className="mono mt-3 border-t border-[#EFE6D4] pt-2 text-[10.5px] text-[#9A8F7C]">hostel · exams · fees · clubs</div>
-              </div>
-            </div>
-          </div>
+      {/* ================= ABOUT ================= */}
+      <section id="about" className="section scroll-mt-20">
+        <div className="grid items-start gap-6 lg:grid-cols-[1.2fr_.8fr]">
           <div className="rv">
-            <h2 className="h2 max-w-md">Ask anything. Get sourced answers.</h2>
-            <p className="muted mt-3 max-w-md text-[14px] leading-relaxed">
-              Students type naturally and get answers pulled from official college knowledge —
-              with the document behind every response. No app, no account, no queue.
+            <h2 className="h2 max-w-xl">One trusted place for everything your college knows.</h2>
+            <p className="muted mt-4 max-w-[65ch] text-[14.5px] leading-relaxed">
+              CollegeMate turns scattered circulars, PDFs and notice-board updates into a single
+              conversational knowledge base. Students ask in plain language; answers arrive with
+              their sources attached.
             </p>
-            <Link href="/demo/mits-madanapalle" className="btn-primary mt-5">Try the live demo</Link>
+          </div>
+          <div className="rv card tint-cream border p-5">
+            <div className="text-[14px] font-extrabold">Why colleges pick it</div>
+            <ul className="mt-3 space-y-2 text-[13px]">
+              {["Live the same day you register", "No app or login for students", "Departments own their knowledge"].map((t) => (
+                <li key={t} className="flex items-center gap-2.5">
+                  <span className="text-[#15803D]" aria-hidden="true">✓</span>{t}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* ================= CAPABILITIES ================= */}
-      <section className="section">
-        <h2 className="h2 rv mx-auto max-w-xl text-center">Everything a campus needs</h2>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {CAPABILITIES.map((c, i) => (
-            <div key={c.t} className={`card rv card-hover flex gap-3.5 border p-4 ${c.tint}`} data-d={i} style={{ transitionDelay: `${(i % 3) * 90}ms` }}>
-              <span className={`flex h-10 w-10 flex-none items-center justify-center rounded-lg text-white ${c.bg}`}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">{c.icon}</svg>
-              </span>
+      {/* ================= PROBLEM ================= */}
+      <section id="problem" className="section scroll-mt-20">
+        <h2 className="h2 rv max-w-xl">Finding answers shouldn&apos;t be the hard part.</h2>
+        <div className="mt-8 divide-y divide-[#EFE6D4] border-y border-[#EFE6D4]">
+          {PROBLEMS.map((p) => (
+            <div key={p.n} className="rv grid gap-1.5 py-5 sm:grid-cols-[56px_1fr] sm:gap-5">
+              <span className="mono text-[13px] font-bold text-[#16130C]">{p.n}</span>
               <span>
-                <span className="block text-[14px] font-extrabold">{c.t}</span>
-                <span className="muted mt-0.5 block text-[12.5px] leading-relaxed">{c.d}</span>
+                <span className="text-[15.5px] font-extrabold tracking-tight">{p.t}</span>
+                <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{p.d}</span>
               </span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ================= ASK CAROUSEL ================= */}
+      {/* ================= SOLUTION ================= */}
+      <section id="solution" className="section scroll-mt-20">
+        <h2 className="h2 rv max-w-xl">One knowledge layer for the entire college.</h2>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+          {SOLUTIONS.map((s, i) => (
+            <div key={s.n} className="card rv card-hover border p-5" data-d={i} style={{ transitionDelay: `${(i % 2) * 90}ms` }}>
+              <span className="mono text-[12px] font-bold text-[#9A8F7C]">{s.n}</span>
+              <div className="mt-2 text-[15px] font-extrabold">{s.t}</div>
+              <div className="muted mt-1 text-[13px] leading-relaxed">{s.d}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= COMPARE ================= */}
+      <section id="compare" className="section scroll-mt-20">
+        <h2 className="h2 rv mx-auto max-w-xl text-center">Why not a generic chatbot?</h2>
+        <p className="muted rv mx-auto mt-3 max-w-lg text-center text-[13.5px] leading-relaxed">
+          Generic AI knows the world. CollegeMate knows your institution.
+        </p>
+        <div className="card rv mx-auto mt-8 max-w-3xl overflow-hidden !rounded-2xl text-left shadow-[0_8px_30px_rgba(22,19,12,0.06)]">
+          <div className="overflow-x-auto">
+            <table className="cmp min-w-[560px] border-collapse">
+              <colgroup>
+                <col style={{ width: "40%" }} />
+                <col className="bg-[#FFF6DF]" style={{ width: "30%" }} />
+                <col style={{ width: "30%" }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th className="!border-t-0"></th>
+                  <th className="!border-t-0 !text-[13px] !font-extrabold !normal-case !tracking-normal">CollegeMate</th>
+                  <th className="!border-t-0 !text-[13px] !font-extrabold !normal-case !tracking-normal">Generic AI</th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARE.map((r) => (
+                  <tr key={r[0]} className="cmp-row">
+                    <td className="!text-[13px] font-semibold">{r[0]}</td>
+                    <td className="hlcol !text-[13px]">{r[1]}</td>
+                    <td className="muted !text-[13px]">{r[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= FAQS ================= */}
       <section id="faq" className="section scroll-mt-20">
         <h2 className="h2 rv mx-auto max-w-md text-center">Real questions, sourced answers</h2>
+        <p className="muted rv mx-auto mt-3 max-w-md text-center text-[13.5px]">The kind of things students actually ask.</p>
         <div className="mt-8 grid gap-4 md:grid-cols-3" key={qi}>
-          {QA_SETS[qi].map((c, i) => (
-            <div key={c.q} className={`card rv-in border p-5 ${c.tint}`} style={{ animationDelay: `${i * 80}ms` }}>
+          {QA_SETS[qi].map((c) => (
+            <div key={c.q} className={`card rv-in border p-5 ${c.tint}`}>
               <div className="font-display text-2xl font-black text-[#16130C]/15" aria-hidden="true">“</div>
               <div className="-mt-2 text-[14.5px] font-extrabold leading-snug">{c.q}</div>
               <div className="muted mt-2 text-[13px] leading-relaxed">{c.a}</div>
@@ -238,9 +262,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= REGISTER CTA ================= */}
-      <section className="section text-center">
+      {/* ================= CTA ================= */}
+      <section id="cta" className="section scroll-mt-20 text-center">
         <h2 className="h2 rv mx-auto max-w-xl">BRING COLLEGEMATE TO YOUR CAMPUS.</h2>
+        <p className="muted rv mx-auto mt-3 max-w-md text-[14px]">Register in under a minute. Your workspace goes live the same day.</p>
         <form
           className="rv mx-auto mt-6 grid max-w-md gap-2"
           onSubmit={(e) => { e.preventDefault(); goRegister(news); }}
