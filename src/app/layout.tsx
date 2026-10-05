@@ -45,7 +45,6 @@ function Nav() {
         </nav>
         <div className="flex items-center gap-2">
           <Link href="/auth" className="navlink hidden sm:inline">Login</Link>
-          <Link href="/demo/mits-madanapalle" className="navlink hidden xl:inline">Live demo</Link>
           <Link href="/register" className="btn-primary btn-sm">Register your college</Link>
           <details className="relative lg:hidden">
             <summary className="btn-ghost btn-sm cursor-pointer list-none">Menu</summary>
@@ -99,7 +98,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <Link href="/#solution" className="muted hover:text-[#FFFFFF]">Solution</Link>
                   <Link href="/#compare" className="muted hover:text-[#FFFFFF]">Compare</Link>
                   <Link href="/#faq" className="muted hover:text-[#FFFFFF]">FAQs</Link>
-                  <Link href="/demo/mits-madanapalle" className="muted hover:text-[#FFFFFF]">Live demo</Link>
                   <Link href="/register" className="muted hover:text-[#FFFFFF]">Register</Link>
                 </div>
               </div>
@@ -117,7 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <p className="muted mt-1.5 text-[12.5px]">Academic, administrative, departmental and support info — cited.</p>
                 <div className="mt-3 flex gap-2">
                   <Link href="/register" className="btn-primary btn-sm flex-1">Register</Link>
-                  <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm flex-1">Live demo</Link>
+                  <Link href="/chat" className="btn-ghost btn-sm flex-1">Student chat</Link>
                 </div>
               </div>
             </div>

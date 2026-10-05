@@ -4,7 +4,6 @@ import Link from "next/link";
 
 const CMDS = [
   { tab: "Register", code: "open  /register   →   onboard your college" },
-  { tab: "Demo", code: "open  /demo/mits-madanapalle   →   live workspace" },
   { tab: "Chat", code: "open  /chat   →   ask, get cited answers" },
 ];
 
@@ -72,8 +71,8 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#00E67A]/10 blur-3xl" aria-hidden="true" />
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
           <div>
-            <Link href="/demo/mits-madanapalle" className="badge badge-acc mono rise !text-[11px]" style={{ animationDelay: "0ms" }}>
-              <span className="dot dot-pulse" aria-hidden="true" /> Live demo running — MITS-Madanapalle
+            <Link href="/#solution" className="badge badge-acc mono rise !text-[11px]" style={{ animationDelay: "0ms" }}>
+              <span className="dot dot-pulse" aria-hidden="true" /> Cited answers · workspace-scoped
             </Link>
             <h1 className="h1 rise mt-5 max-w-xl" style={{ animationDelay: "70ms" }}>
               AI-Powered Knowledge Assistant for Colleges
@@ -92,10 +91,10 @@ export default function Home() {
             </p>
             <div className="rise mt-6 flex flex-wrap gap-3" style={{ animationDelay: "320ms" }}>
               <Link href="/register" className="btn-primary">Register Your College</Link>
-              <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore Live Demo</Link>
+              <Link href="/#solution" className="btn-ghost">See how it works</Link>
             </div>
             <p className="mono muted rise mt-3 text-[11.5px]" style={{ animationDelay: "360ms" }}>
-              Web · Mobile · API — free demo · no installation
+              Web · Mobile · API — no installation · cited answers
             </p>
           </div>
 
@@ -122,7 +121,7 @@ export default function Home() {
                   <span className="badge">[academic-regulations.pdf · p.24 · Academics]</span>
                   <span className="badge">[circular-118.pdf · p.2 · Exams]</span>
                 </div>
-                <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm w-full">Ask it yourself — open the demo →</Link>
+                <Link href="/chat" className="btn-ghost btn-sm w-full">Ask it yourself — open student chat →</Link>
               </div>
             </div>
             <div className="card mt-3 p-4">
@@ -206,7 +205,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm mt-4 w-full">See it working →</Link>
+            <Link href="/chat" className="btn-ghost btn-sm mt-4 w-full">Open student chat →</Link>
           </div>
         </div>
       </section>
@@ -264,7 +263,7 @@ export default function Home() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/register" className="btn-primary btn-sm">Bring this to your college →</Link>
-            <Link href="/demo/mits-madanapalle" className="btn-ghost btn-sm">Verify with the live demo</Link>
+            <Link href="/#compare" className="btn-ghost btn-sm">See how it compares</Link>
           </div>
         </div>
       </section>
@@ -280,28 +279,28 @@ export default function Home() {
         <h2 className="h2 mt-3 text-center">Why CollegeMate</h2>
         <div className="card mt-6 overflow-x-auto p-2">
           <table className="cmp min-w-[680px]">
-            <thead><tr><th></th><th>Demo</th><th>Campus</th><th>Self-host</th><th>Generic bot</th><th></th></tr></thead>
+            <thead><tr><th></th><th>Campus</th><th>Self-host</th><th>Generic bot</th><th></th></tr></thead>
             <tbody>
               {[
-                ["Runs on", "Demo docs", "Your docs", "Your servers", "The internet"],
-                ["Start with", "Open demo", "Register", "Deploy", "Prompt"],
-                ["Citations", "Yes", "Yes", "Yes", "Rarely"],
-                ["Tenancy", "1 college", "Per college", "Yours", "Shared"],
-                ["Unknowns", "Fallback", "Fallback", "Fallback", "May go beyond sources"],
-                ["Departments", "Scoped", "Scoped", "Scoped", "Usually not"],
-                ["LLM", "Sarvam", "Sarvam", "Your model", "Locked in"],
+                ["Runs on", "Your docs", "Your servers", "The internet"],
+                ["Start with", "Register", "Deploy", "Prompt"],
+                ["Citations", "Yes", "Yes", "Rarely"],
+                ["Tenancy", "Per college", "Yours", "Shared"],
+                ["Unknowns", "Fallback", "Fallback", "May go beyond sources"],
+                ["Departments", "Scoped", "Scoped", "Usually not"],
+                ["LLM", "Sarvam", "Your model", "Locked in"],
               ].map((r) => (
                 <tr key={r[0]}>
                   <td>{r[0]}</td>
-                  <td className="hlcol">{r[1]}</td><td className="hlcol">{r[2]}</td><td className="hlcol">{r[3]}</td>
-                  <td className="muted">{r[4]}</td><td className="muted">↗</td>
+                  <td className="hlcol">{r[1]}</td><td className="hlcol">{r[2]}</td>
+                  <td className="muted">{r[3]}</td><td className="muted">↗</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <p className="muted px-3 py-2 text-[11.5px]">Every claim maps to a route or table in this build. Checked just now.</p>
           <div className="flex justify-center pb-3">
-            <Link href="/demo/mits-madanapalle" className="btn-primary btn-sm">Open the live demo →</Link>
+            <Link href="/register" className="btn-primary btn-sm">Register your college →</Link>
           </div>
         </div>
       </section>
@@ -338,7 +337,7 @@ export default function Home() {
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link href="/register" className="btn-primary">Register your college</Link>
-                <Link href="/demo/mits-madanapalle" className="btn-ghost">Explore live demo</Link>
+                <Link href="/chat" className="btn-ghost">Open student chat</Link>
               </div>
             </div>
             <div className="card-elevated p-5">
