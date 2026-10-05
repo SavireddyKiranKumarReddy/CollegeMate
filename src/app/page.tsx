@@ -126,6 +126,20 @@ function sk(w: number) {
   return <div className="h-2 rounded-full bg-[#222228]" style={{ width: `${w}%` }} />;
 }
 
+function Stat({ value, cap }: { value: string; cap: string }) {
+  const loading = value === "…" || value === "—";
+  return (
+    <div>
+      {loading ? (
+        <div className="skeleton mx-auto h-7 w-12" aria-label="loading" />
+      ) : (
+        <div className="stat-num">{value}</div>
+      )}
+      <div className="stat-cap">{cap}</div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [cmd, setCmd] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -180,18 +194,21 @@ export default function Home() {
       <section className="section relative text-center">
         <div className="dots dots-fade pointer-events-none absolute inset-0" />
         <div className="relative">
-          <h1 className="h1 mx-auto max-w-3xl">AI-Powered College Knowledge Assistant</h1>
+          <Link href="/demo/mits-madanapalle" className="badge badge-gold mono !text-[11px]">
+            <span className="dot dot-pulse" aria-hidden="true" /> Live demo running — MITS-Madanapalle
+          </Link>
+          <h1 className="h1 mx-auto mt-5 max-w-3xl">AI-Powered College Knowledge Assistant</h1>
           <p className="mx-auto mt-4 max-w-xl text-[15px] font-medium leading-relaxed text-[#d4d4d8]">
             <span className="hl">college-scoped</span> answers from verified docs — fees, cutoffs,
             placements — with <span className="hl">citations on everything</span>, in{" "}
             <span className="hl">separate workspaces</span>
           </p>
 
-          <div className="card mx-auto mt-7 max-w-xl p-5 text-left">
+          <div className="card-elevated mx-auto mt-7 max-w-xl p-5 text-left">
             <div className="grid grid-cols-3 gap-4 text-center">
-              <div><div className="stat-num">{stats.colleges}</div><div className="stat-cap">colleges live</div></div>
-              <div><div className="stat-num">{stats.depts}</div><div className="stat-cap">departments</div></div>
-              <div><div className="stat-num">{stats.docs}</div><div className="stat-cap">documents</div></div>
+              <Stat value={stats.colleges} cap="colleges live" />
+              <Stat value={stats.depts} cap="departments" />
+              <Stat value={stats.docs} cap="documents" />
             </div>
             <div className="divider mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pt-3 text-[11.5px] muted">
               <span className="mono">Web · Mobile · API</span>
@@ -227,9 +244,11 @@ export default function Home() {
 
       {/* ================= WORKSPACE PANEL ================= */}
       <section id="workflows" className="section">
-        <div className="mx-auto flex max-w-fit items-center gap-1 rounded-full border border-[#232329] bg-[#101013] p-1">
+        <p className="eyebrow text-center">How it fits together</p>
+        <h2 className="h2 mt-2 text-center">One flow, from approval to answer</h2>
+        <div className="mx-auto mt-5 flex max-w-fit items-center gap-1 rounded-full border border-[#232329] bg-[#101013] p-1" role="tablist" aria-label="Workflow categories">
           {WTABS.map((s, i) => (
-            <button key={s} onClick={() => setWtab(i)}
+            <button key={s} role="tab" aria-selected={wtab === i} onClick={() => setWtab(i)}
               className={`mono rounded-full px-4 py-1.5 text-[12px] ${wtab === i ? "bg-white font-semibold text-black" : "muted hover:text-white"}`}>
               {s}
             </button>
@@ -238,15 +257,19 @@ export default function Home() {
         <div className="card mt-4 p-4 sm:p-5">
           <div className="mb-3 flex items-center justify-between">
             <span className="mono text-[11.5px] muted">collegemate / {WTABS[wtab].toLowerCase()}</span>
-            <span className="mono flex items-center gap-1.5 text-[11.5px] muted"><span>←</span><span>→</span> switch</span>
+            <span className="mono hidden text-[11.5px] muted sm:inline">{cards.length} steps</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {cards.map((w, i) => (
-              <Link key={w.t} href={w.k} className="card card-hover block p-4">
+              <Link key={w.t} href={w.k} className="card card-hover group block p-4">
+                <div className="mb-3 flex items-start justify-between gap-2">
+                  <span className="badge badge-neutral mono !text-[10px]">{w.cat}</span>
+                  <span className="mono muted text-[10.5px]">0{i + 1}</span>
+                </div>
                 <div className="mb-3 min-h-16">{w.v}</div>
-                <div className="text-[14px] font-semibold">{w.t}</div>
+                <div className="text-[14px] font-semibold">{w.t} <span className="muted transition group-hover:text-white">→</span></div>
                 <div className="muted mt-0.5 text-[12.5px]">{w.d}</div>
-                <div className="mono muted mt-2 text-[10.5px]">0{i + 1} · {w.k} →</div>
+                <div className="mono muted mt-2 text-[10.5px]">{w.k}</div>
               </Link>
             ))}
           </div>
@@ -293,30 +316,33 @@ export default function Home() {
 
       {/* ================= STATUS ================= */}
       <section className="section">
-        <h2 className="h2">Live status</h2>
+        <p className="eyebrow">System status</p>
+        <h2 className="h2 mt-2">Live data, not screenshots</h2>
+        <p className="lead mt-2 max-w-lg text-[14px]">Pulled from <span className="kbd">/api/health</span> on every page load.</p>
         <div className="mt-5 grid gap-3 lg:grid-cols-3">
           <div className="card card-pad">
-            <div className="stat-num">{stats.colleges}</div><div className="stat-cap">college workspace live</div>
+            <Stat value={stats.colleges} cap="college workspace live" />
             <div className="divider mono muted mt-4 pt-3 text-[11.5px]">onboarded · approved · isolated</div>
           </div>
           <div className="card card-pad">
-            <div className="stat-num">{stats.depts}</div><div className="stat-cap">departments structured</div>
+            <Stat value={stats.depts} cap="departments structured" />
             <div className="divider mono muted mt-4 pt-3 text-[11.5px]">scoped faculty access</div>
           </div>
           <div className="card card-pad">
-            <div className="stat-num">{stats.docs}</div><div className="stat-cap">documents indexed</div>
+            <Stat value={stats.docs} cap="documents indexed" />
             <div className="divider mono muted mt-4 pt-3 text-[11.5px]">cited in every answer</div>
           </div>
         </div>
-        <p className="mono muted mt-3 text-[11px]">● Live · /api/health · refreshes on load, not a screenshot.</p>
+        <p className="mono muted mt-3 flex items-center gap-2 text-[11px]"><span className="dot dot-pulse text-[#86efac]" aria-hidden="true" /> Live · refreshes on load</p>
       </section>
 
       {/* ================= COMPARE ================= */}
       <section id="compare" className="section">
-        <div className="flex items-center justify-center gap-3">
+        <p className="eyebrow text-center">Honest comparison</p>
+        <div className="mt-2 flex items-center justify-center gap-3">
           <span className="badge mono !text-[11px]">CollegeMate</span>
           <span className="font-display text-xl font-bold">VS</span>
-          <span className="badge mono !text-[11px]">Generic bot</span>
+          <span className="badge badge-neutral mono !text-[11px]">Generic bot</span>
         </div>
         <h2 className="h2 mt-3 text-center">Why CollegeMate</h2>
         <div className="card mt-6 overflow-x-auto p-2">
@@ -349,8 +375,9 @@ export default function Home() {
 
       {/* ================= SCREENS ================= */}
       <section className="section">
-        <h2 className="h2 text-center">What you&apos;re opening</h2>
-        <p className="muted mono mt-2 text-center text-[11.5px]">6 spaces · captured live · hover to magnify</p>
+        <p className="eyebrow text-center">Product tour</p>
+        <h2 className="h2 mt-2 text-center">What you&apos;re opening</h2>
+        <p className="muted mono mt-2 text-center text-[11.5px]">6 spaces · live routes, click any card to open it</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Screen href="/dashboard" cap="Super hub">
             {sk(90)}{sk(70)}{sk(82)}
@@ -384,7 +411,8 @@ export default function Home() {
 
       {/* ================= EXAMPLES ================= */}
       <section className="section">
-        <h2 className="h2 text-center">Ask, get cited answers</h2>
+        <p className="eyebrow text-center">Grounded answers</p>
+        <h2 className="h2 mt-2 text-center">Ask, get cited answers</h2>
         <div className="mx-auto mt-6 grid max-w-4xl gap-3 sm:grid-cols-2">
           {[
             ["What is the minimum attendance requirement?", "75% — [regulations.pdf · p.24 · Attendance]", "Academic"],
@@ -392,10 +420,13 @@ export default function Home() {
             ["How do I apply for a bonafide?", "Portal + 2 days — [admin.pdf · p.7 · Admin]", "Admin"],
             ["Placement eligibility criteria?", "7.0 CGPA, no backlogs — [placements.xlsx · p.1]", "Placements"],
           ].map(([q, a, src]) => (
-            <div key={q} className="card card-pad">
+            <div key={q} className="card card-hover card-pad">
               <div className="text-[14px] font-semibold">“{q}”</div>
               <div className="muted mt-2 text-[13px]">{a}</div>
-              <div className="mono muted mt-2 text-[10.5px]">{src} · illustrative format</div>
+              <div className="mt-3 flex items-center gap-2">
+                <span className="badge badge-green mono !text-[10px]">{src}</span>
+                <span className="mono muted text-[10.5px]">illustrative format</span>
+              </div>
             </div>
           ))}
         </div>
@@ -408,8 +439,8 @@ export default function Home() {
         <div className="mx-auto mt-6 grid max-w-4xl gap-2.5 sm:grid-cols-2">
           {FAQS.map((f, i) => (
             <div key={f.q} className={`faq-item ${openFaq === i ? "open" : ""}`}>
-              <button className="faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                {f.q}<span className="muted">+</span>
+              <button className="faq-q" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                {f.q}<span className="muted" aria-hidden="true">{openFaq === i ? "−" : "+"}</span>
               </button>
               {openFaq === i && <div className="faq-a">{f.a}</div>}
             </div>
