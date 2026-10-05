@@ -244,20 +244,34 @@ export default function Home() {
             Existing players like Ivy.ai, Ocelot and AdmitHub serve big universities well — but
             they&apos;re priced and paced for enterprise. Most colleges never get there.
           </p>
-          <div className="card rv mx-auto mt-8 max-w-4xl overflow-x-auto !rounded-2xl p-2 text-left">
-            <table className="cmp min-w-[640px]">
-              <thead><tr><th></th><th className="!text-[#5046E5]">CollegeMate</th><th>University chatbots</th><th>College website</th></tr></thead>
-              <tbody>
-                {COMPARE.map((r) => (
-                  <tr key={r[0]} className="cmp-row">
-                    <td>{r[0]}</td>
-                    <td className="hlcol !bg-[#EEEDFD]/60">{r[1]}</td>
-                    <td className="muted">{r[2]}</td>
-                    <td className="muted">{r[3]}</td>
+          <div className="card rv mx-auto mt-8 max-w-4xl overflow-hidden !rounded-2xl text-left">
+            <div className="overflow-x-auto p-2">
+              <table className="cmp min-w-[640px] border-collapse">
+                <colgroup>
+                  <col />
+                  <col className="bg-[#EEEDFD]/70" />
+                  <col /><col />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th className="!border-t-0"></th>
+                    <th className="!border-t-0 !text-[#5046E5]">CollegeMate</th>
+                    <th className="!border-t-0">University chatbots</th>
+                    <th className="!border-t-0">College website</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {COMPARE.map((r) => (
+                    <tr key={r[0]} className="cmp-row">
+                      <td className="font-medium">{r[0]}</td>
+                      <td className="hlcol">{r[1]}</td>
+                      <td className="muted">{r[2]}</td>
+                      <td className="muted">{r[3]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -267,13 +281,15 @@ export default function Home() {
         <h2 className="h2 rv text-center">Questions, answered.</h2>
         <div className="rv mx-auto mt-8 max-w-2xl">
           {FAQS.map((f, i) => (
-            <div key={f.q} className="border-b border-[#E6E5F1]">
-              <button className="faq-q group !px-1" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+            <div key={f.q} className="border-b border-[#E6E5F1] transition-colors hover:border-[#D3D2E6]">
+              <button className="group flex w-full items-center justify-between gap-4 py-5 text-left text-[15px] font-semibold" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                 <span className="transition-colors group-hover:text-[#5046E5]">{f.q}</span>
-                <span className={`muted transition-transform duration-300 ${openFaq === i ? "rotate-180" : ""}`} aria-hidden="true">⌄</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`h-4 w-4 flex-none text-[#8F8FA8] transition-transform duration-300 group-hover:text-[#5046E5] ${openFaq === i ? "rotate-180" : ""}`} aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </button>
               <div className={`acc-body ${openFaq === i ? "acc-open" : ""}`}>
-                <div className="overflow-hidden"><div className="faq-a !px-1">{f.a}</div></div>
+                <div className="overflow-hidden"><div className="faq-a !px-0 pb-5">{f.a}</div></div>
               </div>
             </div>
           ))}
