@@ -10,7 +10,7 @@ const ITEMS = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <PanelShell
-      sidebar={<Sidebar title="Super admin" sub="kiransavireddy@gmail.com" items={ITEMS} />}
+      sidebar={<Sidebar title="Super admin" sub="Control plane" items={ITEMS} />}
     >
       {children}
     </PanelShell>

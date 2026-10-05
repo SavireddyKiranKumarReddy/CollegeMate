@@ -4,22 +4,30 @@ import { usePathname } from "next/navigation";
 
 export type SideItem = { href: string; label: string; tag?: string };
 
+function isActive(path: string, href: string) {
+  if (path === href) return true;
+  // Parent stays highlighted for nested routes, but never match the site root broadly.
+  if (href !== "/" && path.startsWith(href + "/")) return true;
+  return false;
+}
+
 export default function Sidebar({ title, sub, items }: { title: string; sub?: string; items: SideItem[] }) {
   const path = usePathname();
   return (
-    <aside className="w-full shrink-0 md:w-60">
+    <aside className="w-full shrink-0 md:w-60" aria-label="Section navigation">
       <div className="card overflow-hidden md:sticky md:top-24">
         <div className="border-b border-[#1c1c21] px-4 py-3.5">
           <div className="truncate text-[14px] font-semibold">{title}</div>
           {sub && <div className="mono muted mt-0.5 truncate text-[11px]">{sub}</div>}
         </div>
-        <nav className="flex gap-1 overflow-x-auto p-2 md:flex-col">
+        <nav className="flex gap-1 overflow-x-auto p-2 md:flex-col" aria-label={title}>
           {items.map((it) => {
-            const active = path === it.href;
+            const active = isActive(path, it.href);
             return (
               <Link
                 key={it.href}
                 href={it.href}
+                aria-current={active ? "page" : undefined}
                 className={`flex items-center justify-between gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-[13.5px] font-medium transition ${
                   active ? "bg-white text-black" : "muted hover:bg-[#1a1a1f] hover:text-white"
                 }`}

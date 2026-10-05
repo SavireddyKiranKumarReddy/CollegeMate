@@ -29,10 +29,10 @@ export const metadata: Metadata = {
 
 function Nav() {
   return (
-    <div className="mx-auto max-w-6xl px-6 pt-5">
-      <header className="flex items-center justify-between gap-3 rounded-full border border-[#232329] bg-[#101013]/90 py-2.5 pl-4 pr-2.5 backdrop-blur">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[13px] font-bold text-black">C</span>
+    <div className="sticky top-0 z-50 mx-auto max-w-6xl px-6 pt-5">
+      <header className="flex items-center justify-between gap-3 rounded-full border border-[#232329] bg-[#101013]/90 py-2.5 pl-4 pr-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
+        <Link href="/" className="flex items-center gap-2" aria-label="CollegeMate home">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[13px] font-bold text-black" aria-hidden="true">C</span>
           <span className="font-display text-[15px] font-bold tracking-tight">CollegeMate</span>
         </Link>
         <nav className="hidden items-center gap-0.5 lg:flex">
@@ -62,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <Nav />
         <main id="main-content" className="mx-auto max-w-6xl px-6">{children}</main>
         <footer className="mx-auto max-w-6xl px-6 pb-8 pt-4">
