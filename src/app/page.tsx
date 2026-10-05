@@ -148,25 +148,28 @@ export default function Home() {
 
       {/* ================= ABOUT ================= */}
       <section id="about" className="section scroll-mt-20">
-        <div className="grid items-start gap-6 lg:grid-cols-[1.2fr_.8fr]">
-          <div className="rv">
-            <h2 className="h2 max-w-xl">One trusted place for everything your college knows.</h2>
-            <p className="muted mt-4 max-w-[65ch] text-[14.5px] leading-relaxed">
-              CollegeMate turns scattered circulars, PDFs and notice-board updates into a single
-              conversational knowledge base. Students ask in plain language; answers arrive with
-              their sources attached.
-            </p>
-          </div>
-          <div className="rv card tint-cream border p-5">
-            <div className="text-[14px] font-extrabold">Why colleges pick it</div>
-            <ul className="mt-3 space-y-2 text-[13px]">
-              {["Live the same day you register", "No app or login for students", "Departments own their knowledge"].map((t) => (
-                <li key={t} className="flex items-center gap-2.5">
-                  <span className="text-[#15803D]" aria-hidden="true">✓</span>{t}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="rv">
+          <h2 className="h2 max-w-2xl">One trusted place for everything your college knows.</h2>
+          <p className="muted mt-4 max-w-[65ch] text-[14.5px] leading-relaxed">
+            CollegeMate brings your college&apos;s scattered documents, notices, policies, and
+            departmental information into one intelligent knowledge platform. Students and
+            faculty can ask questions in plain language and get clear, college-specific
+            answers with the source behind every response.
+          </p>
+        </div>
+        <h3 className="h3 rv mt-8">Built for the way colleges work</h3>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {[
+            ["Fast to get started", "Connect your approved college information and start building your knowledge base without complex setup."],
+            ["Simple for students", "Students can ask questions naturally without searching through PDFs, websites, notices, or multiple departments."],
+            ["Owned by your departments", "Departments can manage and update their own information while administrators maintain institutional control."],
+            ["Grounded in your knowledge", "CollegeMate answers from your approved institutional information instead of relying on generic internet results."],
+          ].map(([t, d], i) => (
+            <div key={t} className="card rv card-hover border p-5" data-d={i} style={{ transitionDelay: `${(i % 2) * 90}ms` }}>
+              <div className="text-[15px] font-extrabold">{t}</div>
+              <div className="muted mt-1 text-[13px] leading-relaxed">{d}</div>
+            </div>
+          ))}
         </div>
       </section>
 
