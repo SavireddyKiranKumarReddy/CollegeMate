@@ -77,7 +77,7 @@ export default function FacultyAccess({ params }: { params: Promise<{ college: s
           {depts.map((d) => {
             const link = deptLink(d.id);
             return (
-              <div key={d.id} className="flex flex-col gap-2 rounded-lg border border-[#232329] px-3 py-2.5 sm:flex-row sm:items-center">
+              <div key={d.id} className="flex flex-col gap-2 rounded-lg border border-[#E4DFD3] px-3 py-2.5 sm:flex-row sm:items-center">
                 <span className="min-w-32 text-[13.5px] font-medium">{d.name}</span>
                 <code className="mono muted flex-1 truncate text-[11px]">{link}</code>
                 <button className="btn-ghost btn-sm" onClick={() => copy(link)}>{copied === link ? "Copied" : "Copy link"}</button>

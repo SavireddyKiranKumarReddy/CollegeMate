@@ -91,7 +91,7 @@ export default function CollegeAdmin() {
           <button className="btn-primary mt-3 w-full" onClick={createDept}>Add department</button>
           <div className="mt-4 space-y-2">
             {depts.map((d) => (
-              <div key={d.id} className="flex items-center justify-between rounded-lg border border-[#232329] px-3 py-2 text-[13.5px]">
+              <div key={d.id} className="flex items-center justify-between rounded-lg border border-[#E4DFD3] px-3 py-2 text-[13.5px]">
                 <span>{d.name}</span>
                 <span className="mono muted text-[12px]">{d.code}</span>
               </div>
