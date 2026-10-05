@@ -148,17 +148,17 @@ export default function Home() {
 
       {/* ================= ABOUT ================= */}
       <section id="about" className="section scroll-mt-20">
-        <div className="rv mx-auto max-w-2xl text-center">
-          <h2 className="h2">One trusted place for everything your college knows.</h2>
-          <p className="muted mx-auto mt-4 max-w-[65ch] text-[14.5px] leading-relaxed">
+        <div className="rv mx-auto max-w-3xl text-center">
+          <h2 className="h2 lg:!text-[48px]">One trusted place for everything your college knows.</h2>
+          <p className="muted mx-auto mt-4 max-w-[65ch] text-[16px] leading-relaxed">
             CollegeMate brings your college&apos;s scattered documents, notices, policies, and
             departmental information into one intelligent knowledge platform. Students and
             faculty can ask questions in plain language and get clear, college-specific
             answers with the source behind every response.
           </p>
         </div>
-        <h3 className="h3 rv mt-8 text-center">Built for the way colleges work</h3>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <h3 className="h3 rv mt-8 text-center !text-[22px]">Built for the way colleges work</h3>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Fast to get started", "Connect your approved college information and start building your knowledge base without complex setup."],
             ["Simple for students", "Students can ask questions naturally without searching through PDFs, websites, notices, or multiple departments."],
@@ -166,8 +166,8 @@ export default function Home() {
             ["Grounded in your knowledge", "CollegeMate answers from your approved institutional information instead of relying on generic internet results."],
           ].map(([t, d]) => (
             <div key={t} className="card rv border p-5 transition-colors hover:bg-[#FAF6EA]">
-              <div className="text-[15px] font-extrabold">{t}</div>
-              <div className="muted mt-1 text-[13px] leading-relaxed">{d}</div>
+              <div className="text-[16px] font-extrabold">{t}</div>
+              <div className="muted mt-1 text-[14px] leading-relaxed">{d}</div>
             </div>
           ))}
         </div>
