@@ -53,7 +53,7 @@ body {
   font-family: Nunito, ui-sans-serif, system-ui, sans-serif;
 }
 
-::selection { background: var(--ink); color: #fff; }
+::selection { background: #F7B500; color: #16130C; }
 
 /* Global keyboard focus — visible on every interactive element */
 a:focus-visible,

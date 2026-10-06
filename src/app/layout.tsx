@@ -92,13 +92,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Link>
                 <div className="mt-3 flex gap-2">
                   {[
-                    { href: "/chat", label: "Student chat", icon: <path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z" /> },
-                    { href: "/demo/mits-madanapalle", label: "Live demo", icon: <><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></> },
-                    { href: "/register", label: "Register", icon: <><path d="M4 6h16v12H4z" /><path d="m4 7 8 6 8-6" /></> },
+                    { href: "https://x.com/NxtgenSec", label: "X (Twitter)", icon: <path d="M4 4l16 16M20 4 4 20" /> },
+                    { href: "https://instagram.com/nxtgensec", label: "Instagram", icon: <><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" /></> },
+                    { href: "https://linkedin.com/company/nxtgensec", label: "LinkedIn", icon: <><rect x="3.5" y="3.5" width="17" height="17" rx="4" /><path d="M8 10.5V17" /><circle cx="8" cy="7.8" r="0.7" fill="currentColor" /><path d="M12 17v-3.8c0-1.6 1-2.7 2.6-2.7 1.4 0 2.4.9 2.4 2.7V17" /></> },
+                    { href: "https://youtube.com/@NxtGenSec", label: "YouTube", icon: <><rect x="2.5" y="6" width="19" height="12.5" rx="4" /><path d="M10.5 9.7l4.5 2.5-4.5 2.5z" fill="currentColor" stroke="none" /></> },
+                    { href: "https://github.com/nxtgensec", label: "GitHub", icon: <><path d="m8 8-4.5 4.5L8 17" /><path d="m16 8 4.5 4.5L16 17" /></> },
+                    { href: "mailto:hello@collegemate.app", label: "Email", icon: <><rect x="3" y="5.5" width="18" height="13" rx="3" /><path d="m4 7.5 8 6 8-6" /></> },
                   ].map((s) => (
-                    <Link key={s.href} href={s.href} aria-label={s.label} className="flex h-8 w-8 items-center justify-center rounded-full bg-[#16130C] text-white transition-transform hover:-translate-y-0.5">
+                    <a key={s.label} href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" aria-label={s.label} className="flex h-8 w-8 items-center justify-center rounded-full bg-[#16130C] text-white transition-transform hover:-translate-y-0.5">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">{s.icon}</svg>
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>

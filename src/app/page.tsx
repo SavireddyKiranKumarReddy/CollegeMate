@@ -148,7 +148,8 @@ export default function Home() {
 
       {/* ================= ABOUT ================= */}
       <section id="about" className="section scroll-mt-20">
-        <div className="rv mx-auto max-w-3xl text-center">
+        <p className="rv text-center text-[12px] font-bold lowercase tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">about</span></p>
+        <div className="rv mx-auto mt-3 max-w-3xl text-center">
           <h2 className="h2 lg:!text-[48px]">One trusted place for everything your college knows.</h2>
           <p className="muted mx-auto mt-4 max-w-[65ch] text-[16px] leading-relaxed">
             CollegeMate brings your college&apos;s scattered documents, notices, policies, and
