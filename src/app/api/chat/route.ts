@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { queryTerms, scoreChunk } from "@/lib/rag";
+import { lookupFact } from "@/lib/knowledge";
 
 const SARVAM_URL = "https://api.sarvam.ai/v1/chat/completions";
 
@@ -53,6 +54,30 @@ export async function POST(req: Request) {
     }
 
     const terms = queryTerms(question);
+
+    // Tier 1: stored facts (verified first, stale flagged) — instant, no LLM.
+    try {
+      const hit = await lookupFact(sb, cid, question);
+      if (hit) {
+        const { fact, stale } = hit;
+        await sb.from("query_logs").insert({
+          college_id: cid,
+          question: question.slice(0, 500),
+          answer_preview: fact.answer.slice(0, 500),
+          citations: [{ doc: fact.source_label || "knowledge base", dept: "stored", fact: fact.id }],
+          confidence: stale ? "medium" : "high",
+        });
+        return NextResponse.json({
+          answer: fact.answer,
+          citations: [{ doc: fact.source_label || "knowledge base", dept: "stored", fact: fact.id, chunk: -1 }],
+          confidence: stale ? "medium" : "high",
+          fallback: false,
+        });
+      }
+    } catch (e) {
+      console.error("fact lookup failed", e);
+    }
+
     let chunks: any[] = [];
     if (terms.length > 0) {
       const ors = terms.map((t) => `content_preview.ilike.%${t}%`).join(",");

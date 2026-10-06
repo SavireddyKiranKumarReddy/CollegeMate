@@ -71,7 +71,7 @@ export default function CollegeChat({ params }: { params: Promise<{ college: str
               <div className="mono muted mt-1.5 flex flex-wrap gap-1.5 text-[11px]">
                 {m.conf && <span className={`badge ${m.fb ? "badge-amber" : "badge-green"}`}>{m.fb ? "fallback" : m.conf}</span>}
                 {(m.cits || []).map((c, j) => (
-                  <span key={j} className="badge">[{c.doc} · {c.dept} · #{c.chunk}]</span>
+                  <span key={j} className="badge">[{c.doc}{c.dept && c.dept !== "stored" ? ` · ${c.dept}` : ""}{c.chunk >= 0 ? ` · #${c.chunk}` : ""}]</span>
                 ))}
               </div>
             ) : null}

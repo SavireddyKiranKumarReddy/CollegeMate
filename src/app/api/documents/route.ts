@@ -59,8 +59,10 @@ export async function POST(req: Request) {
     if (error) throw error;
 
     // extract + chunk for RAG (best-effort; upload still succeeds if this fails)
+    let fullText = "";
     try {
       const text = await extractText(buf, ext, file.type || "");
+      fullText = text;
       const chunks = chunkText(text);
       if (chunks.length > 0) {
         const sb2 = supabaseAdmin();
@@ -77,6 +79,37 @@ export async function POST(req: Request) {
       }
     } catch (e) {
       console.error("chunk insert failed", e);
+    }
+
+    // knowledge layer (best-effort): stale old facts for same-titled doc, extract candidates as pending
+    try {
+      const titleUsed = (title || safeName).slice(0, 200);
+      const sb3 = supabaseAdmin();
+      await sb3
+        .from("knowledge_facts")
+        .update({ status: "stale", updated_at: new Date().toISOString() })
+        .eq("college_id", college_id)
+        .eq("status", "verified")
+        .eq("source_label", titleUsed)
+        .neq("source_document_id", data.id);
+      const { extractFacts } = await import("@/lib/knowledge");
+      const cands = await extractFacts(fullText);
+      if (cands.length > 0) {
+        await sb3.from("knowledge_facts").insert(
+          cands.map((c) => ({
+            college_id,
+            department_id,
+            question: c.question,
+            answer: c.answer,
+            topic: c.topic,
+            source_document_id: data.id,
+            source_label: titleUsed,
+            status: "pending",
+          }))
+        );
+      }
+    } catch (e) {
+      console.error("fact extraction failed", e);
     }
     return NextResponse.json({ document: data });
   } catch (e: any) {

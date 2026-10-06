@@ -11,6 +11,7 @@ export default function CollegeLayout({ children, params }: { children: React.Re
     { href: `/${slug}/departments`, label: "Departments" },
     { href: `/${slug}/faculty`, label: "Faculty access", tag: "links" },
     { href: `/${slug}/documents`, label: "Documents" },
+    { href: `/${slug}/knowledge`, label: "Knowledge", tag: "facts" },
     { href: `/${slug}/chat`, label: "Test chat", tag: "try" },
     { href: `/${slug}/settings`, label: "Settings" },
   ];

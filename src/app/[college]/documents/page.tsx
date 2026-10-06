@@ -9,6 +9,7 @@ export default function CollegeDocs({ params }: { params: Promise<{ college: str
   const [docs, setDocs] = useState<any[]>([]);
   const [depts, setDepts] = useState<any[]>([]);
   const [filter, setFilter] = useState("");
+  const [factCounts, setFactCounts] = useState<Record<string, number>>({});
 
   async function load() {
     if (!college) return;
@@ -16,6 +17,12 @@ export default function CollegeDocs({ params }: { params: Promise<{ college: str
     if (filter) q.set("department_id", filter);
     const r = await fetch(`/api/documents?${q.toString()}`).then((x) => x.json());
     setDocs(r.documents || []);
+    const f = await fetch(`/api/facts?college_id=${college.id}`).then((x) => x.json()).catch(() => null);
+    const counts: Record<string, number> = {};
+    for (const fact of f?.facts || []) {
+      if (fact.source_document_id) counts[fact.source_document_id] = (counts[fact.source_document_id] || 0) + 1;
+    }
+    setFactCounts(counts);
     if (depts.length === 0) {
       const d = await fetch(`/api/departments?college_id=${college.id}`).then((x) => x.json());
       setDepts(d.departments || []);
@@ -46,8 +53,9 @@ export default function CollegeDocs({ params }: { params: Promise<{ college: str
               <div className="truncate text-[13.5px] font-medium">{d.title || d.file_name}</div>
               <div className="mono muted mt-0.5 text-[11.5px]">{d.file_name} · {new Date(d.created_at).toLocaleString()}</div>
             </div>
-            <div className="flex shrink-0 gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <span className="badge badge-green">ready</span>
+              {factCounts[d.id] ? <span className="badge badge-neutral mono !text-[10px]">{factCounts[d.id]} facts</span> : null}
               <button className="btn-ghost btn-sm" onClick={() => remove(d.id)}>Delete</button>
             </div>
           </div>
