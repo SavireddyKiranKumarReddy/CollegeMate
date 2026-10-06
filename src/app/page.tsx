@@ -148,7 +148,7 @@ export default function Home() {
 
       {/* ================= ABOUT ================= */}
       <section id="about" className="section scroll-mt-20">
-        <p className="rv text-center text-[12px] font-bold lowercase tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">about</span></p>
+        <p className="rv text-center text-[12px] font-bold tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">About</span></p>
         <div className="rv mx-auto mt-3 max-w-3xl text-center">
           <h2 className="h2 lg:!text-[48px]">One trusted place for everything your college knows.</h2>
           <p className="muted mx-auto mt-4 max-w-[65ch] text-[16px] leading-relaxed">
@@ -176,7 +176,8 @@ export default function Home() {
 
       {/* ================= PROBLEM ================= */}
       <section id="problem" className="section scroll-mt-20">
-        <h2 className="h2 rv mx-auto max-w-2xl text-center">Finding answers shouldn&apos;t be the hard part.</h2>
+        <p className="rv text-center text-[12px] font-bold tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">Problem</span></p>
+        <h2 className="h2 rv mx-auto mt-3 max-w-2xl text-center">Finding answers shouldn&apos;t be the hard part.</h2>
         <div className="mx-auto mt-8 max-w-3xl divide-y divide-[#EFE6D4] border-y border-[#EFE6D4]">
           {PROBLEMS.map((p) => (
             <div key={p.n} className="rv grid gap-1.5 py-5 sm:grid-cols-[56px_1fr] sm:gap-5">
@@ -192,7 +193,8 @@ export default function Home() {
 
       {/* ================= SOLUTION ================= */}
       <section id="solution" className="section scroll-mt-20">
-        <h2 className="h2 rv mx-auto max-w-2xl text-center">One knowledge layer for the entire college.</h2>
+        <p className="rv text-center text-[12px] font-bold tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">Solution</span></p>
+        <h2 className="h2 rv mx-auto mt-3 max-w-2xl text-center">One knowledge layer for the entire college.</h2>
         <div className="mx-auto mt-8 grid max-w-4xl gap-3 sm:grid-cols-2">
           {SOLUTIONS.map((s, i) => (
             <div key={s.n} className="card rv card-hover border p-5" data-d={i} style={{ transitionDelay: `${(i % 2) * 90}ms` }}>
@@ -206,7 +208,8 @@ export default function Home() {
 
       {/* ================= COMPARE ================= */}
       <section id="compare" className="section scroll-mt-20">
-        <h2 className="h2 rv mx-auto max-w-xl text-center">Why not a generic chatbot?</h2>
+        <p className="rv text-center text-[12px] font-bold tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">Compare</span></p>
+        <h2 className="h2 rv mx-auto mt-3 max-w-xl text-center">Why not a generic chatbot?</h2>
         <p className="muted rv mx-auto mt-3 max-w-lg text-center text-[13.5px] leading-relaxed">
           Generic AI knows the world. CollegeMate knows your institution.
         </p>
@@ -241,7 +244,8 @@ export default function Home() {
 
       {/* ================= FAQS ================= */}
       <section id="faq" className="section scroll-mt-20">
-        <h2 className="h2 rv mx-auto max-w-md text-center">Real questions, sourced answers</h2>
+        <p className="rv text-center text-[12px] font-bold tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">FAQs</span></p>
+        <h2 className="h2 rv mx-auto mt-3 max-w-md text-center">Real questions, sourced answers</h2>
         <p className="muted rv mx-auto mt-3 max-w-md text-center text-[13.5px]">The kind of things students actually ask.</p>
         <div className="mt-8 grid gap-4 md:grid-cols-3" key={qi}>
           {QA_SETS[qi].map((c) => (
