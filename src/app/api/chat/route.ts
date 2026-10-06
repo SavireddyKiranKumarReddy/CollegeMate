@@ -39,9 +39,20 @@ export async function POST(req: Request) {
     const THANKS = new Set(["thanks", "thank you", "thankyou", "thanks a lot", "thank you so much"]);
     const BYE = new Set(["bye", "goodbye", "see you", "see you later"]);
     let small: string | null = null;
-    if (GREET.has(norm)) small = `Hello! I'm CollegeMate. Ask me anything about ${cname}, like exams, fees, attendance, hostel or placements, and I'll answer from official college documents.`;
-    else if (THANKS.has(norm)) small = "You're welcome! Ask anytime you need something about your college.";
-    else if (BYE.has(norm)) small = "Goodbye! I'll be here whenever you have a question about your college.";
+    const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+    if (GREET.has(norm)) small = pick([
+      `Hello! I'm CollegeMate. Ask me anything about ${cname}, like exams, fees, attendance, hostel or placements, and I'll answer from official college documents.`,
+      `Hi there! Looking for something about ${cname}? Ask away and I'll find it in the official college documents.`,
+      `Hey! I can look up exams, fees, hostel, placements and more for ${cname}. What do you need?`,
+    ]);
+    else if (THANKS.has(norm)) small = pick([
+      "You're welcome! Ask anytime you need something about your college.",
+      "Happy to help! Anything else about your college, just ask.",
+    ]);
+    else if (BYE.has(norm)) small = pick([
+      "Goodbye! I'll be here whenever you have a question about your college.",
+      "See you soon! Come back anytime with college questions.",
+    ]);
     if (small) {
       await sb.from("query_logs").insert({
         college_id: cid,
