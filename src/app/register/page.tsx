@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", domain: "", city: "", contact_email: "", notes: "" });
@@ -32,7 +33,7 @@ export default function Register() {
     <div className="page mx-auto max-w-xl">
       <p className="eyebrow">Onboarding</p>
       <h1 className="h2 mt-2">Register college</h1>
-      <p className="lead mt-2 text-[14px]">Takes 30 seconds. Approval + admin assignment happens at <span className="kbd">/super</span>.</p>
+      <p className="lead mt-2 text-[14px]">Get your college workspace reviewed and approved.</p>
       <form onSubmit={submit} className="card card-pad mt-6 space-y-4">
         <div>
           <label className="label">College name *</label>
@@ -63,6 +64,12 @@ export default function Register() {
           </p>
         )}
       </form>
+      <p className="mt-5 text-center text-[13.5px] text-[#6E6455]">
+        Already have an account?{" "}
+        <Link href="/login" className="font-extrabold text-[#16130C] underline underline-offset-4 hover:text-[#5046E5]">
+          Click here to login
+        </Link>
+      </p>
     </div>
   );
 }
