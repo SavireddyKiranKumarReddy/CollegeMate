@@ -40,7 +40,11 @@ export async function POST(req: Request) {
     const BYE = new Set(["bye", "goodbye", "see you", "see you later"]);
     let small: string | null = null;
     const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
-    if (GREET.has(norm)) small = pick([
+    // Greetings are detected by words, so "hey hii" and "hello there" count too.
+    const GREET_WORDS = new Set([...GREET, "there", "good", "morning", "afternoon", "evening", "dear", "heyhey"]);
+    const words = norm.split(/\s+/).filter(Boolean);
+    const isGreeting = words.length > 0 && words.length <= 4 && words.every((w: string) => GREET_WORDS.has(w));
+    if (isGreeting) small = pick([
       `Hello! I'm CollegeMate. Ask me anything about ${cname}, like exams, fees, attendance, hostel or placements, and I'll answer from official college documents.`,
       `Hi there! Looking for something about ${cname}? Ask away and I'll find it in the official college documents.`,
       `Hey! I can look up exams, fees, hostel, placements and more for ${cname}. What do you need?`,
