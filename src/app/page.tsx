@@ -182,14 +182,18 @@ export default function Home() {
       <section id="problem" className="section scroll-mt-20">
         <p className="rv text-center text-[12px] font-bold tracking-[.2em] text-[#B4A88F]"><span className="underline underline-offset-4">Problem</span></p>
         <h2 className="h2 rv mx-auto mt-3 max-w-2xl text-center">Finding answers shouldn&apos;t be the hard part.</h2>
-        <div className="mx-auto mt-8 max-w-3xl divide-y divide-[#EFE6D4] border-y border-[#EFE6D4]">
-          {PROBLEMS.map((p) => (
-            <div key={p.n} className="rv grid gap-1.5 py-5 sm:grid-cols-[56px_1fr] sm:gap-5">
-              <span className="mono text-[13px] font-bold text-[#16130C]">{p.n}</span>
-              <span>
-                <span className="text-[15.5px] font-extrabold tracking-tight">{p.t}</span>
-                <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{p.d}</span>
-              </span>
+        <div className="mx-auto mt-8 grid max-w-5xl gap-x-10 sm:grid-cols-2">
+          {[PROBLEMS.slice(0, 4), PROBLEMS.slice(4)].map((col, ci) => (
+            <div key={ci} className="divide-y divide-[#EFE6D4] border-y border-[#EFE6D4]">
+              {col.map((p) => (
+                <div key={p.n} className="rv grid gap-1.5 py-5 sm:grid-cols-[48px_1fr] sm:gap-4">
+                  <span className="mono text-[13px] font-bold text-[#16130C]">{p.n}</span>
+                  <span>
+                    <span className="text-[15.5px] font-extrabold tracking-tight">{p.t}</span>
+                    <span className="muted mt-1 block max-w-[65ch] text-[13.5px] leading-relaxed">{p.d}</span>
+                  </span>
+                </div>
+              ))}
             </div>
           ))}
         </div>
