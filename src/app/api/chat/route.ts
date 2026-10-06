@@ -68,6 +68,22 @@ export async function POST(req: Request) {
     const histTerms = queryTerms(pastUserTexts.join(" "));
     const qtrim = question.trim();
 
+    // Broad/vague queries ("i need", "college info") carry no answerable content:
+    // offer a topic menu instead of retrieving random chunks.
+    const FILLER = new Set(["i", "need", "want", "give", "tell", "show", "know", "about", "college", "info", "information", "details", "detail", "some", "any", "anything", "everything", "please", "entire", "whole", "full"]);
+    const contentTerms = queryTerms(question).filter((t) => !FILLER.has(t));
+    if (contentTerms.length === 0) {
+      const text = "Sure! Which topic do you need: exams, fees, attendance, hostel, placements or admissions?";
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: text.slice(0, 500),
+        citations: [],
+        confidence: "menu",
+      });
+      return NextResponse.json({ answer: text, citations: [], fallback: false });
+    }
+
     // Fragments and acknowledgements get a conversational ask-back, never a dead-end fallback.
     const isFrag = /(\.\.\.|…)\s*$/.test(qtrim) || /^(and|what about|how about|why|why not|tell me more|more|continue|explain|elaborate|and then|\?+)\??$/i.test(qtrim);
     const isAck = /^(ok|okay|k|hmm?|yes|yeah?|yep|no|nope|alright|sure)\.?$/i.test(qtrim);
@@ -162,6 +178,7 @@ HARD RULES
 - Never claim information is current unless CONTEXT says so.
 - For harassment, ragging, threats, discrimination, mental-health, medical, or emergency topics: be supportive, make no accusations or diagnoses, and point to the verified college authority or emergency contact in CONTEXT. If none exists there, say so clearly.
 - If the answer is not in CONTEXT, reply exactly: NOT_IN_DATA
+- Never respond with a generic deflection ("I can help with X, Y, Z — what do you need?"). Either answer from CONTEXT with citations, or reply NOT_IN_DATA.
 - Answer only what was asked; politely decline anything outside college knowledge.
 - If the question has multiple plausible meanings with different answers, ask which one is meant instead of guessing.
 - If a natural next step exists AND is in CONTEXT, offer it briefly at the end. Never force a follow-up.
