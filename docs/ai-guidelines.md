@@ -31,3 +31,11 @@ fallback). Summaries below; the route file is the source of truth.
 17. **Continuation** — offer an obvious next step only if in context.
 18. **Freshness** — never claim currentness without a source update.
 19. **Final** — accuracy over answering; partial info stated as partial.
+
+## Applied routing (`route.ts`)
+- Greetings/thanks/farewells bypass retrieval (rotating variants).
+- Fragments ("why?", "and then?") and acks ("ok") get ask-backs, never the
+  dead-end fallback; history terms seed the ask-back hint.
+- Retrieval merges current + recent history terms (follow-ups work).
+- Facts tier answers instantly without the LLM; uncited LLM answers
+  (`used` empty) are routed to fallback, never served as fact.

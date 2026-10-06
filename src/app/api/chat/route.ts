@@ -64,7 +64,31 @@ export async function POST(req: Request) {
       return NextResponse.json({ answer: small, citations: [], fallback: false });
     }
 
-    const terms = queryTerms(question);
+    const pastUserTexts = past.filter((p) => p.role === "user").map((p) => p.content);
+    const histTerms = queryTerms(pastUserTexts.join(" "));
+    const qtrim = question.trim();
+
+    // Fragments and acknowledgements get a conversational ask-back, never a dead-end fallback.
+    const isFrag = /(\.\.\.|…)\s*$/.test(qtrim) || /^(and|what about|how about|why|why not|tell me more|more|continue|explain|elaborate|and then|\?+)\??$/i.test(qtrim);
+    const isAck = /^(ok|okay|k|hmm?|yes|yeah?|yep|no|nope|alright|sure)\.?$/i.test(qtrim);
+    if (isFrag || isAck) {
+      const hint = histTerms.slice(0, 3).join(", ");
+      const text = isAck
+        ? "Got it. What else would you like to know about your college?"
+        : hint
+          ? `I want to get you the right answer. Are you still asking about ${hint}? Tell me a little more.`
+          : "I want to get you the right answer. Could you say a little more about what you are looking for?";
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: text.slice(0, 500),
+        citations: [],
+        confidence: isAck ? "ack" : "clarify",
+      });
+      return NextResponse.json({ answer: text, citations: [], fallback: false });
+    }
+
+    const terms = Array.from(new Set([...queryTerms(question), ...histTerms])).slice(0, 10);
 
     // Tier 1: stored facts (verified first, stale flagged) — instant, no LLM.
     try {
@@ -200,6 +224,22 @@ STYLE
       parsed = { answer: content.slice(0, 1000), used: [], confidence: "low" };
     }
     const used: number[] = Array.isArray(parsed.used) ? parsed.used : [];
+    // No cited source = no grounded answer. Never serve an uncited answer as fact.
+    if (used.length === 0) {
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: "Not in official data.",
+        citations: [],
+        confidence: "none",
+      });
+      return NextResponse.json({
+        answer: "Sorry, I don't have specific information about that at the moment. I'll be able to help once the relevant information is added to my knowledge base.",
+        citations: [],
+        confidence: "none",
+        fallback: true,
+      });
+    }
     const citations = used
       .map((n: number) => chunks[n - 1])
       .filter(Boolean)
