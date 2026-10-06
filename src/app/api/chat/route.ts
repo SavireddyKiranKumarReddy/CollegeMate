@@ -32,6 +32,23 @@ export async function POST(req: Request) {
       if (data?.name) cname = data.name;
     }
     if (!cid) return NextResponse.json({ error: "no college" }, { status: 400 });
+    if (cname === "your college") {
+      const { data } = await sb.from("colleges").select("name").eq("id", cid).maybeSingle();
+      if (data?.name) cname = data.name;
+    }
+
+    // Last-resort redirect: honest, actionable, logged for admin review. Never a dead end.
+    const redirectUnanswered = async () => {
+      const text = "I don't have that in the college records yet. I have noted your question for the college admin. Meanwhile I can help with exams, fees, attendance, hostel, placements or admissions. Which topic do you need?";
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: "Unanswered, sent to admin review.",
+        citations: [],
+        confidence: "unanswered",
+      });
+      return NextResponse.json({ answer: text, citations: [], fallback: false });
+    };
 
     // Small talk never needs retrieval — answer directly, no fallback.
     const norm = question.trim().toLowerCase().replace(/[!.,\s]+$/g, "");
@@ -68,13 +85,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ answer: small, citations: [], fallback: false });
     }
 
+    // Identity: answered directly, never retrieved, never a fallback.
+    if (/(who are you|your name|about yourself|what are you|introduce yourself)/i.test(question)) {
+      const text = `I'm CollegeMate, your college assistant. I answer from official ${cname} documents and always show my sources. Ask me about exams, fees, attendance, hostel, placements or admissions.`;
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: text.slice(0, 500),
+        citations: [],
+        confidence: "identity",
+      });
+      return NextResponse.json({ answer: text, citations: [], fallback: false });
+    }
+
     const pastUserTexts = past.filter((p) => p.role === "user").map((p) => p.content);
     const histTerms = queryTerms(pastUserTexts.join(" "));
     const qtrim = question.trim();
 
     // Workspace-structure questions ("what depts do we have") are answered
-    // from live directory data, never from canned text.
-    if (/(department|dept\b|depts|document|docs?\b|files?|what (do you|does \S+ )?(know|have)|list of|how many|which (branches|courses|departments|docs))/i.test(question)) {
+    // from live directory data, never from canned text. Academic program
+    // questions (cse, ece, branches, courses) skip this and use stored facts.
+    const ACADEMIC = /\b(cse|ece|eee|mech|mechanical|civil|branch|branches|program|programs|course|courses|btech|mtech|mba|mca|bca|bba)\b/i;
+    if (!ACADEMIC.test(question) && /(department|dept\b|depts|document|docs?\b|files?|what (do you|does \S+ )?(know|have)|list of|how many|which (branches|courses|departments|docs))/i.test(question)) {
       try {
         const { data: depts } = await sb.from("departments").select("name,code").eq("college_id", cid).order("name").limit(50);
         const { data: docs } = await sb.from("documents").select("title,file_name").eq("college_id", cid).order("created_at", { ascending: false }).limit(50);
@@ -123,23 +155,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // Broad/vague queries ("i need", "college info") carry no answerable content:
-    // offer a topic menu instead of retrieving random chunks.
-    const FILLER = new Set(["i", "need", "want", "give", "tell", "show", "know", "about", "college", "info", "information", "details", "detail", "some", "any", "anything", "everything", "please", "entire", "whole", "full"]);
-    const contentTerms = queryTerms(question).filter((t) => !FILLER.has(t));
-    if (contentTerms.length === 0) {
-      const text = "Sure! Which topic do you need: exams, fees, attendance, hostel, placements or admissions?";
-      await sb.from("query_logs").insert({
-        college_id: cid,
-        question: question.slice(0, 500),
-        answer_preview: text.slice(0, 500),
-        citations: [],
-        confidence: "menu",
-      });
-      return NextResponse.json({ answer: text, citations: [], fallback: false });
-    }
-
-    // Fragments and acknowledgements get a conversational ask-back, never a dead-end fallback.
+    // Fragments and acknowledgements get a conversational ask-back, never a dead end.
     const isFrag = /(\.\.\.|…)\s*$/.test(qtrim) || /^(and|what about|how about|why|why not|tell me more|more|continue|explain|elaborate|and then|\?+)\??$/i.test(qtrim);
     const isAck = /^(ok|okay|k|hmm?|yes|yeah?|yep|no|nope|alright|sure)\.?$/i.test(qtrim);
     if (isFrag || isAck) {
@@ -155,6 +171,22 @@ export async function POST(req: Request) {
         answer_preview: text.slice(0, 500),
         citations: [],
         confidence: isAck ? "ack" : "clarify",
+      });
+      return NextResponse.json({ answer: text, citations: [], fallback: false });
+    }
+
+    // Broad/vague queries ("i need", "college info") carry no answerable content:
+    // offer a topic menu instead of retrieving random chunks.
+    const FILLER = new Set(["i", "need", "want", "give", "tell", "show", "know", "about", "college", "student", "students", "info", "information", "details", "detail", "some", "any", "anything", "everything", "please", "entire", "whole", "full"]);
+    const contentTerms = queryTerms(question).filter((t) => !FILLER.has(t));
+    if (contentTerms.length === 0) {
+      const text = "Sure! Which topic do you need: exams, fees, attendance, hostel, placements or admissions?";
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: text.slice(0, 500),
+        citations: [],
+        confidence: "menu",
       });
       return NextResponse.json({ answer: text, citations: [], fallback: false });
     }
@@ -201,19 +233,7 @@ export async function POST(req: Request) {
     }
 
     if (chunks.length === 0) {
-      await sb.from("query_logs").insert({
-        college_id: cid,
-        question: question.slice(0, 500),
-        answer_preview: "Not in official data.",
-        citations: [],
-        confidence: "none",
-      });
-      return NextResponse.json({
-        answer: "Sorry, I don't have specific information about that at the moment. I'll be able to help once the relevant information is added to my knowledge base.",
-        citations: [],
-        confidence: "none",
-        fallback: true,
-      });
+      return redirectUnanswered();
     }
 
     const context = chunks
@@ -282,12 +302,7 @@ STYLE
     const msg = JSON.parse(raw).choices?.[0]?.message || {};
     const content = (msg.content || msg.reasoning_content || "").trim();
     if (content.trim() === "NOT_IN_DATA" || content.includes("NOT_IN_DATA")) {
-      return NextResponse.json({
-        answer: "Sorry, I don't have specific information about that at the moment. I'll be able to help once the relevant information is added to my knowledge base.",
-        citations: [],
-        confidence: "none",
-        fallback: true,
-      });
+      return redirectUnanswered();
     }
     let parsed: any = {};
     try {
@@ -296,21 +311,9 @@ STYLE
       parsed = { answer: content.slice(0, 1000), used: [], confidence: "low" };
     }
     const used: number[] = Array.isArray(parsed.used) ? parsed.used : [];
-    // No cited source = no grounded answer. Never serve an uncited answer as fact.
+    // No cited source = no grounded answer. Redirect, never serve uncited as fact.
     if (used.length === 0) {
-      await sb.from("query_logs").insert({
-        college_id: cid,
-        question: question.slice(0, 500),
-        answer_preview: "Not in official data.",
-        citations: [],
-        confidence: "none",
-      });
-      return NextResponse.json({
-        answer: "Sorry, I don't have specific information about that at the moment. I'll be able to help once the relevant information is added to my knowledge base.",
-        citations: [],
-        confidence: "none",
-        fallback: true,
-      });
+      return redirectUnanswered();
     }
     const citations = used
       .map((n: number) => chunks[n - 1])
