@@ -145,16 +145,16 @@ export default function Auth() {
         <form onSubmit={register} className="card card-pad mt-3 space-y-4">
           <div>
             <label className="label">College name *</label>
-            <input className="input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="e.g. MITS-Madanapalle" />
+            <input className="input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="e.g. Greenwood Institute of Technology" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="label">Short code</label>
-              <input className="input" value={form.domain} onChange={(e) => setForm({ ...form, domain: e.target.value })} placeholder="mits" />
+              <input className="input" value={form.domain} onChange={(e) => setForm({ ...form, domain: e.target.value })} placeholder="greenwood" />
             </div>
             <div>
               <label className="label">City</label>
-              <input className="input" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="Madanapalle" />
+              <input className="input" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="Maplewood" />
             </div>
           </div>
           <div>

@@ -105,7 +105,7 @@ export default function CollegeAdmin() {
           <div className="mt-3 space-y-3">
             <div>
               <label className="label">Faculty email</label>
-              <input className="input" placeholder="prof@mits.edu" value={facultyEmail} onChange={(e) => setFacultyEmail(e.target.value)} />
+              <input className="input" placeholder="prof@greenwood.edu" value={facultyEmail} onChange={(e) => setFacultyEmail(e.target.value)} />
             </div>
             <div>
               <label className="label">Department scope</label>

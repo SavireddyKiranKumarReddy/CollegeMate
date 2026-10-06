@@ -62,7 +62,7 @@ export default function FacultyAccess({ params }: { params: Promise<{ college: s
 
       <div className="card card-pad mt-5">
         <div className="flex flex-col gap-2 sm:flex-row">
-          <input className="input flex-1" placeholder="faculty email — prof@mits.edu" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input flex-1" placeholder="faculty email — prof@greenwood.edu" value={email} onChange={(e) => setEmail(e.target.value)} />
           <select className="input sm:max-w-56" value={deptId} onChange={(e) => setDeptId(e.target.value)}>
             <option value="">All departments</option>
             {depts.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
