@@ -54,8 +54,10 @@ export default function CollegeChat({ params }: { params: Promise<{ college: str
       <div className="card card-pad min-h-[240px] space-y-3" aria-live="polite" aria-label="Test conversation">
         {log.length === 0 && (
           <div className="empty">
-            <div className="empty-title">Ask anything — e.g. “What is CSE fees?”</div>
-            <div className="empty-body mono text-[12px]">answers cite [doc · dept · chunk]</div>
+            <div className="empty-title">Ask anything</div>
+            <div className="empty-body mt-1 text-[13px]">Any question about your college. One trusted answer.</div>
+            <div className="empty-body mt-1 text-[13px]">e.g. “What is CSE fees?”</div>
+            <div className="empty-body mono mt-1 text-[12px]">answers cite [doc · dept · chunk]</div>
           </div>
         )}
         {log.map((m, i) => (
