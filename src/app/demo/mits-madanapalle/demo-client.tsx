@@ -82,9 +82,11 @@ export default function DemoClient() {
         </div>
         <div className="mt-4 space-y-2.5">
           {log.map((m, i) => (
-            <div key={i}>
-              <div className="chat-bubble-q text-[13.5px]"><span className="mono muted mr-2 text-[11px]">YOU</span>{m.q}</div>
-              <div className="chat-bubble-a muted mt-1.5 text-[13.5px]"><span className="mono muted mr-2 text-[11px]">AI</span>{m.a}</div>
+            <div key={i} className="space-y-1">
+              <div className="flex justify-end">
+                <div className="max-w-[85%] rounded-2xl rounded-br-md bg-[#16130C] px-3.5 py-2.5 text-[13.5px] font-medium text-white">{m.q}</div>
+              </div>
+              <div className="max-w-[95%] py-1 text-[13.5px] leading-relaxed">{m.a}</div>
             </div>
           ))}
           {log.length === 0 && <div className="empty">Tap an example question above.</div>}

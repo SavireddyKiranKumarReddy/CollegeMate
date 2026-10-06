@@ -60,12 +60,13 @@ export default function CollegeChat({ params }: { params: Promise<{ college: str
         )}
         {log.map((m, i) => (
           <div key={i}>
-            <div className={m.role === "q" ? "chat-bubble-q text-[14px]" : "chat-bubble-a text-[14px] leading-relaxed"}>
-              <span className={`chat-role ${m.role === "q" ? "chat-role-q" : "chat-role-a"}`}>
-                <span className="dot" aria-hidden="true" />{m.role === "q" ? "YOU" : "COLLEGEMATE"}
-              </span>
-              <div>{m.text}</div>
-            </div>
+            {m.role === "q" ? (
+              <div className="flex justify-end">
+                <div className="max-w-[85%] rounded-2xl rounded-br-md bg-[#16130C] px-3.5 py-2.5 text-[14px] font-medium text-white">{m.text}</div>
+              </div>
+            ) : (
+              <div className="max-w-[95%] py-1 text-[14px] leading-relaxed">{m.text}</div>
+            )}
             {m.role === "a" && (m.cits?.length || m.conf) ? (
               <div className="mono muted mt-1.5 flex flex-wrap gap-1.5 text-[11px]">
                 {m.conf && <span className={`badge ${m.fb ? "badge-amber" : "badge-green"}`}>{m.fb ? "fallback" : m.conf}</span>}

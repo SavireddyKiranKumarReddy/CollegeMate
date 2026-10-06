@@ -19,15 +19,38 @@ export async function POST(req: Request) {
 
     const sb = supabaseAdmin();
     let cid = college_id as string | undefined;
+    let cname = "your college";
     if (!cid && college_domain) {
-      const { data } = await sb.from("colleges").select("id").eq("domain", college_domain).maybeSingle();
+      const { data } = await sb.from("colleges").select("id,name").eq("domain", college_domain).maybeSingle();
       cid = data?.id;
+      if (data?.name) cname = data.name;
     }
     if (!cid) {
-      const { data } = await sb.from("colleges").select("id").eq("status", "approved").limit(1).maybeSingle();
+      const { data } = await sb.from("colleges").select("id,name").eq("status", "approved").limit(1).maybeSingle();
       cid = data?.id;
+      if (data?.name) cname = data.name;
     }
     if (!cid) return NextResponse.json({ error: "no college" }, { status: 400 });
+
+    // Small talk never needs retrieval — answer directly, no fallback.
+    const norm = question.trim().toLowerCase().replace(/[!.,\s]+$/g, "");
+    const GREET = new Set(["hi", "hii", "hiii", "hello", "hey", "heyy", "namaste", "good morning", "good afternoon", "good evening"]);
+    const THANKS = new Set(["thanks", "thank you", "thankyou", "thanks a lot", "thank you so much"]);
+    const BYE = new Set(["bye", "goodbye", "see you", "see you later"]);
+    let small: string | null = null;
+    if (GREET.has(norm)) small = `Hello! I'm CollegeMate. Ask me anything about ${cname} — exams, fees, attendance, hostel, placements — and I'll answer from official college documents.`;
+    else if (THANKS.has(norm)) small = "You're welcome! Ask anytime you need something about your college.";
+    else if (BYE.has(norm)) small = "Goodbye! I'll be here whenever you have a question about your college.";
+    if (small) {
+      await sb.from("query_logs").insert({
+        college_id: cid,
+        question: question.slice(0, 500),
+        answer_preview: small.slice(0, 500),
+        citations: [],
+        confidence: "greeting",
+      });
+      return NextResponse.json({ answer: small, citations: [], fallback: false });
+    }
 
     const terms = queryTerms(question);
     let chunks: any[] = [];
