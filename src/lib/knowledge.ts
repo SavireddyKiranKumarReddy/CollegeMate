@@ -87,6 +87,13 @@ export async function lookupFact(sb: any, college_id: string, question: string):
     docs: ["documents"],
   };
   const expanded = Array.from(new Set([...terms, ...terms.flatMap((t) => ALIAS[t] || [])]));
+  // Singular/plural variants so "fees" also matches "fee structure".
+  const variants = Array.from(new Set(expanded.flatMap((t) => {
+    const out = [t];
+    if (t.length >= 4 && t.endsWith("s")) out.push(t.slice(0, -1));
+    else if (t.length > 3) out.push(t + "s");
+    return out;
+  })));
   const { data, error } = await sb
     .from("knowledge_facts")
     .select("id,question,answer,topic,source_label,source_document_id,department_id,status")
@@ -99,16 +106,19 @@ export async function lookupFact(sb: any, college_id: string, question: string):
   for (const f of data as StoredFact[]) {
     const hay = `${f.question} ${f.answer} ${f.topic || ""}`.toLowerCase();
     let s = 0;
-    for (const t of expanded) {
+    for (const t of variants) {
       if (hay.includes(t)) s += t.length > 5 ? 3 : 1;
     }
-    // Require real overlap: 2+ term hits, or a single strong (long) hit.
-    const hits = expanded.filter((t) => hay.includes(t)).length;
-    const strong = expanded.some((t) => t.length > 5 && hay.includes(t));
-    if (!(hits >= 2 || (hits === 1 && strong))) continue;
+    // Require real overlap: 2+ term hits, a single strong (long) hit,
+    // one solid (4+ letter) hit, or a direct hit on the fact's question.
+    const hits = variants.filter((t) => hay.includes(t)).length;
+    const strong = variants.some((t) => t.length > 5 && hay.includes(t));
+    const solid = variants.some((t) => t.length >= 4 && hay.includes(t));
+    const qhit = variants.some((t) => t.length >= 3 && f.question.toLowerCase().includes(t));
+    if (!(hits >= 2 || (hits === 1 && (strong || solid)) || qhit)) continue;
     if (f.status === "stale") s -= 2;
     if (s > bestScore) { bestScore = s; best = f; }
   }
-  if (!best || bestScore < 2) return null;
+  if (!best || bestScore < 1) return null;
   return { fact: best, stale: best.status === "stale" };
 }

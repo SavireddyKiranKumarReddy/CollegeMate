@@ -98,6 +98,83 @@ export async function POST(req: Request) {
       return NextResponse.json({ answer: text, citations: [], fallback: false });
     }
 
+    // Topic words route to content tiers; generic branches skip them.
+    const TOPIC = /\b(fee|fees|exam|exams|hostel|placement|placements|attendance|admission|admissions|scholarship|club|event|contact|library|transport|mess|salary|package|recruiter|counselling|counseling|mentor|ragging|ncc|nss)\b/i;
+
+    // Meta: "what do you know / list your info" → honest coverage listing from live data.
+    // Skipped for topic-specific questions (they go to content tiers instead).
+    if (!TOPIC.test(question) && /(what (can you|do you)|list|show).*(know|info|knowledge|answer|topics|cover|have)|what can you (answer|do|tell)/i.test(question)) {
+      try {
+        const { data: all } = await sb.from("knowledge_facts").select("topic").eq("college_id", cid).eq("status", "verified").limit(200);
+        const { count: dcount } = await sb.from("departments").select("id", { count: "exact", head: true }).eq("college_id", cid);
+        const topics = Array.from(new Set((all || []).map((f: any) => f.topic).filter(Boolean))).slice(0, 8);
+        if ((all || []).length > 0) {
+          const text = `I currently answer from ${(all || []).length} verified records covering ${topics.join(", ") || "college information"} across ${dcount || 0} departments. Try asking about exams, fees, attendance, hostel, placements or admissions.`;
+          await sb.from("query_logs").insert({ college_id: cid, question: question.slice(0, 500), answer_preview: text.slice(0, 500), citations: [], confidence: "high" });
+          return NextResponse.json({ answer: text, citations: [], confidence: "high", fallback: false });
+        }
+      } catch (e) { console.error("meta answer failed", e); }
+    }
+
+    // About: "tell me about MITS" → overview composed from verified facts only.
+    if (/(tell me about|about (the )?college|about mits|overview of|introduce|what is (this|the) college)/i.test(question)) {
+      try {
+        const { data: facts } = await sb.from("knowledge_facts").select("id,question,answer,source_label").eq("college_id", cid).eq("status", "verified").limit(12);
+        if (facts && facts.length > 0) {
+          const ctx = facts.map((f: any, i: number) => `[S${i + 1}] ${f.answer}`).join("\n\n").slice(0, 6000);
+          let answer = "";
+          let used: number[] = [];
+          try {
+            const key2 = process.env.SARVAM_API_KEY || "";
+            const model2 = process.env.LLM_MODEL || "sarvam-105b";
+            if (!key2) throw new Error("no key");
+            const dr = await fetch(SARVAM_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "api-subscription-key": key2, Authorization: `Bearer ${key2}` },
+              body: JSON.stringify({
+                model: model2,
+                messages: [
+                  { role: "system", content: "Describe the college in 3 to 5 plain sentences using ONLY the FACTS below. Plain text, no markdown. Reply as JSON: {\"answer\": \"...\", \"used\": [fact numbers]}. If the facts cannot describe the college, reply exactly: NOT_IN_DATA" },
+                  { role: "user", content: `FACTS:\n${ctx}\n\nQUESTION: ${question}` },
+                ],
+                max_tokens: 600,
+                temperature: 0.1,
+                reasoning_effort: null,
+                response_format: {
+                  type: "json_schema",
+                  json_schema: {
+                    name: "overview", strict: true,
+                    schema: { type: "object", properties: { answer: { type: "string" }, used: { type: "array", items: { type: "integer" } } }, required: ["answer", "used"], additionalProperties: false },
+                  },
+                },
+              }),
+            });
+            const dmsg = (await dr.json()).choices?.[0]?.message || {};
+            const parsed = JSON.parse(String(dmsg.content || "{}").replace(/```json|```/g, "").trim());
+            answer = String(parsed.answer || "");
+            used = Array.isArray(parsed.used) ? parsed.used : [];
+          } catch { answer = ""; }
+          if (answer && !answer.includes("NOT_IN_DATA")) {
+            // Prefer the model's citations; otherwise cite the facts the answer overlaps most.
+            let cited = used.map((n: number) => facts[n - 1]).filter(Boolean);
+            if (cited.length === 0) {
+              const at = queryTerms(`${answer} ${question}`);
+              cited = (facts as any[])
+                .map((f: any) => ({ f, s: at.filter((t) => `${f.question} ${f.answer}`.toLowerCase().includes(t)).length }))
+                .filter((x: any) => x.s > 0)
+                .sort((a: any, b: any) => b.s - a.s)
+                .slice(0, 3)
+                .map((x: any) => x.f);
+            }
+            if (cited.length === 0) return redirectUnanswered();
+            const citations = cited.slice(0, 5).map((f: any) => ({ doc: f.source_label || "knowledge base", dept: "stored", fact: f.id, chunk: -1 }));
+            await sb.from("query_logs").insert({ college_id: cid, question: question.slice(0, 500), answer_preview: answer.slice(0, 500), citations, confidence: "high" });
+            return NextResponse.json({ answer, citations, confidence: "high", fallback: false });
+          }
+        }
+      } catch (e) { console.error("about answer failed", e); }
+    }
+
     const pastUserTexts = past.filter((p) => p.role === "user").map((p) => p.content);
     const histTerms = queryTerms(pastUserTexts.join(" "));
     const qtrim = question.trim();
@@ -105,8 +182,9 @@ export async function POST(req: Request) {
     // Workspace-structure questions ("what depts do we have") are answered
     // from live directory data, never from canned text. Academic program
     // questions (cse, ece, branches, courses) skip this and use stored facts.
+    // Topic-specific questions ("what do you know about fees") skip it too.
     const ACADEMIC = /\b(cse|ece|eee|mech|mechanical|civil|branch|branches|program|programs|course|courses|btech|mtech|mba|mca|bca|bba)\b/i;
-    if (!ACADEMIC.test(question) && /(department|dept\b|depts|document|docs?\b|files?|what (do you|does \S+ )?(know|have)|list of|how many|which (branches|courses|departments|docs))/i.test(question)) {
+    if (!ACADEMIC.test(question) && !TOPIC.test(question) && /(department|dept\b|depts|document|docs?\b|files?|what (do you|does \S+ )?(know|have)|list of|how many|which (branches|courses|departments|docs))/i.test(question)) {
       try {
         const { data: depts } = await sb.from("departments").select("name,code").eq("college_id", cid).order("name").limit(50);
         const { data: docs } = await sb.from("documents").select("title,file_name").eq("college_id", cid).order("created_at", { ascending: false }).limit(50);
@@ -130,8 +208,9 @@ export async function POST(req: Request) {
                   { role: "system", content: "Answer the QUESTION using ONLY the DIRECTORY below, in one or two plain sentences. Plain text only, no markdown. If DIRECTORY lacks it, reply exactly: NOT_IN_DATA" },
                   { role: "user", content: `DIRECTORY:\n${dir}\n\nQUESTION: ${question}` },
                 ],
-                max_tokens: 200,
+                max_tokens: 300,
                 temperature: 0.1,
+                reasoning_effort: null,
               }),
             });
             const dmsg = (await dr.json()).choices?.[0]?.message || {};
