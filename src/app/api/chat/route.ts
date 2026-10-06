@@ -68,6 +68,57 @@ export async function POST(req: Request) {
     const histTerms = queryTerms(pastUserTexts.join(" "));
     const qtrim = question.trim();
 
+    // Workspace-structure questions ("what depts do we have") are answered
+    // from live directory data, never from canned text.
+    if (/(department|dept\b|depts|document|docs?\b|files?|what (do you|does \S+ )?(know|have)|list of|how many|which (branches|courses|departments|docs))/i.test(question)) {
+      try {
+        const { data: depts } = await sb.from("departments").select("name,code").eq("college_id", cid).order("name").limit(50);
+        const { data: docs } = await sb.from("documents").select("title,file_name").eq("college_id", cid).order("created_at", { ascending: false }).limit(50);
+        if ((depts && depts.length > 0) || (docs && docs.length > 0)) {
+          const dir = [
+            `College: ${cname}`,
+            `Departments (${depts?.length || 0}): ${(depts || []).map((d: any) => d.code ? `${d.name} (${d.code})` : d.name).join("; ") || "none yet"}`,
+            `Documents (${docs?.length || 0}): ${(docs || []).map((d: any) => d.title || d.file_name).join("; ") || "none yet"}`,
+          ].join("\n");
+          let answer = "";
+          try {
+            const key2 = process.env.SARVAM_API_KEY || "";
+            const model2 = process.env.LLM_MODEL || "sarvam-105b";
+            if (!key2) throw new Error("no key");
+            const dr = await fetch(SARVAM_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "api-subscription-key": key2, Authorization: `Bearer ${key2}` },
+              body: JSON.stringify({
+                model: model2,
+                messages: [
+                  { role: "system", content: "Answer the QUESTION using ONLY the DIRECTORY below, in one or two plain sentences. Plain text only, no markdown. If DIRECTORY lacks it, reply exactly: NOT_IN_DATA" },
+                  { role: "user", content: `DIRECTORY:\n${dir}\n\nQUESTION: ${question}` },
+                ],
+                max_tokens: 200,
+                temperature: 0.1,
+              }),
+            });
+            const dmsg = (await dr.json()).choices?.[0]?.message || {};
+            answer = String(dmsg.content || dmsg.reasoning_content || "").trim();
+          } catch { answer = ""; }
+          if (!answer || answer.includes("NOT_IN_DATA")) {
+            answer = `We have ${(depts || []).length} departments: ${(depts || []).map((d: any) => d.code ? `${d.name} (${d.code})` : d.name).join(", ") || "none yet"}.`;
+          }
+          const citations = [{ doc: `${cname} workspace`, dept: "directory", chunk: -1 }];
+          await sb.from("query_logs").insert({
+            college_id: cid,
+            question: question.slice(0, 500),
+            answer_preview: answer.slice(0, 500),
+            citations,
+            confidence: "high",
+          });
+          return NextResponse.json({ answer, citations, confidence: "high", fallback: false });
+        }
+      } catch (e) {
+        console.error("directory answer failed", e);
+      }
+    }
+
     // Broad/vague queries ("i need", "college info") carry no answerable content:
     // offer a topic menu instead of retrieving random chunks.
     const FILLER = new Set(["i", "need", "want", "give", "tell", "show", "know", "about", "college", "info", "information", "details", "detail", "some", "any", "anything", "everything", "please", "entire", "whole", "full"]);
