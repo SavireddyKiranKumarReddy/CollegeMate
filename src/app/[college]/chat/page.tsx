@@ -55,7 +55,7 @@ export default function CollegeChat({ params }: { params: Promise<{ college: str
         {log.length === 0 && (
           <div className="empty">
             <div className="empty-title">Ask anything</div>
-            <div className="empty-body mt-1 text-[13px]">Any question about your college. One trusted answer.</div>
+            <div className="empty-body mt-1 text-[13px]">about your college for trusted answers.</div>
           </div>
         )}
         {log.map((m, i) => (
