@@ -1,10 +1,19 @@
 "use client";
 import { use } from "react";
+import { useRouter } from "next/navigation";
 import { useCollege } from "@/lib/use-college";
+import { supabaseBrowser } from "@/lib/supabase/client";
 
 export default function CollegeSettings({ params }: { params: Promise<{ college: string }> }) {
   const { college: slug } = use(params);
   const { college } = useCollege(slug);
+  const router = useRouter();
+
+  async function logout() {
+    try { localStorage.removeItem("cm_demo"); } catch {}
+    try { await supabaseBrowser().auth.signOut(); } catch {}
+    router.push("/login");
+  }
 
   return (
     <div>
@@ -28,6 +37,11 @@ export default function CollegeSettings({ params }: { params: Promise<{ college:
           <div className="text-[14px]">{college?.city || "—"}</div>
         </div>
         <p className="muted text-[12.5px]">To change admin email or status, ask super admin at /dashboard.</p>
+      </div>
+      <div className="card card-pad mt-4">
+        <div className="text-[14px] font-semibold">Session</div>
+        <p className="muted mt-1 text-[12.5px]">Sign out of the college admin workspace on this device.</p>
+        <button className="btn-danger-ghost mt-3" onClick={logout}>Logout</button>
       </div>
     </div>
   );

@@ -14,8 +14,8 @@ function isActive(path: string, href: string) {
 export default function Sidebar({ title, sub, items }: { title: string; sub?: string; items: SideItem[] }) {
   const path = usePathname();
   return (
-    <aside className="w-full shrink-0 md:w-60" aria-label="Section navigation">
-      <div className="card overflow-hidden md:sticky md:top-24">
+    <aside className="w-full shrink-0 md:fixed md:bottom-6 md:top-24 md:w-60 md:overflow-y-auto" aria-label="Section navigation">
+      <div className="card overflow-hidden">
         <div className="border-b border-[#EDE9DD] px-4 py-3.5">
           <div className="truncate text-[14px] font-semibold">{title}</div>
           {sub && <div className="mono muted mt-0.5 truncate text-[11px]">{sub}</div>}
@@ -47,7 +47,7 @@ export function PanelShell({ sidebar, children }: { sidebar: React.ReactNode; ch
   return (
     <div className="page flex flex-col gap-4 md:flex-row">
       {sidebar}
-      <div className="min-w-0 flex-1">{children}</div>
+      <div className="min-w-0 flex-1 md:ml-64">{children}</div>
     </div>
   );
 }
