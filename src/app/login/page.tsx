@@ -6,7 +6,7 @@ import { supabaseBrowser } from "@/lib/supabase/client";
 
 export default function Login() {
   const router = useRouter();
-  const [email, setEmail] = useState("kiransavireddy@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
@@ -46,7 +46,7 @@ export default function Login() {
     <div className="page mx-auto max-w-md">
       <p className="eyebrow">Access</p>
       <h1 className="h2 mt-2">Login</h1>
-      <p className="lead mt-2 text-[14px]">Use your assigned email. Super admin: kiransavireddy@gmail.com</p>
+      <p className="lead mt-2 text-[14px]">Use the email your admin granted access to.</p>
       <div className="card card-pad mt-6 space-y-4">
         <div>
           <label className="label">Email</label>

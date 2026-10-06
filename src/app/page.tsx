@@ -5,9 +5,13 @@ import { useRouter } from "next/navigation";
 
 const PROBLEMS = [
   { n: "01", t: "Scattered information", d: "Fees in PDFs, rules in notices, contacts in spreadsheets. Nobody knows the current truth." },
-  { n: "02", t: "Repeated questions", d: "Staff answer the same attendance, certificate and fee questions every single day." },
-  { n: "03", t: "Generic AI guesses", d: "Public chatbots answer confidently from the open internet — not your college's actual rules." },
-  { n: "04", t: "No source, no trust", d: "Without the original document behind an answer, even a correct answer is hard to trust." },
+  { n: "02", t: "Buried notices", d: "Important circulars drown in WhatsApp groups, emails and PDFs — students miss what matters." },
+  { n: "03", t: "Rules nobody understands", d: "Complicated PDFs and legalese need converting into simple, direct answers." },
+  { n: "04", t: "Exam and fee confusion", d: "Exam dates, syllabi, hall tickets, pending fees, fines and payment deadlines — all unclear." },
+  { n: "05", t: "Hidden campus life", d: "Labs, library, gym, medical, counselling, sports — plus every club, its purpose and how to join." },
+  { n: "06", t: "Missed events and opportunities", d: "Fests, workshops, seminars, internships, placements, hackathons and scholarships pass by unnoticed." },
+  { n: "07", t: "Generic AI guesses", d: "Public chatbots answer confidently from the open internet — not your college's actual rules." },
+  { n: "08", t: "No source, no trust", d: "Without the original document behind an answer, even a correct answer is hard to trust." },
 ];
 
 const SOLUTIONS = [
