@@ -23,9 +23,10 @@ export default function Chat() {
     setLog((prev) => [...prev, { role: "q", text: query }]);
     setQ("");
     try {
+      const history = log.slice(-3).flatMap((m) => [{ role: m.role === "q" ? "user" : "assistant", text: m.text }]);
       const r = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ college_domain: "mits-madanapalle", question: query }),
+        body: JSON.stringify({ college_domain: "mits-madanapalle", question: query, history }),
       });
       const j = await r.json();
       setLog((prev) => [...prev, {

@@ -39,9 +39,10 @@ export default function DemoClient() {
     const mine = query;
     setQ("");
     try {
+      const history = log.slice(-3).flatMap((m) => [{ role: "user", text: m.q }, { role: "assistant", text: m.a }]);
       const r = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ college_domain: "mits-madanapalle", question: mine }),
+        body: JSON.stringify({ college_domain: "mits-madanapalle", question: mine, history }),
       });
       const j = await r.json();
       setLog((prev) => [...prev, { q: mine, a: j.answer || j.error || "Something went wrong." }]);

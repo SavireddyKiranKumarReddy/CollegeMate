@@ -6,8 +6,16 @@ const SARVAM_URL = "https://api.sarvam.ai/v1/chat/completions";
 
 export async function POST(req: Request) {
   try {
-    const { college_id, college_domain, question } = await req.json();
+    const { college_id, college_domain, question, history } = await req.json();
     if (!question?.trim()) return NextResponse.json({ error: "question required" }, { status: 400 });
+
+    // Recent conversation for context (pronouns, follow-ups, ambiguity). Bounded.
+    const past: { role: "user" | "assistant"; content: string }[] = Array.isArray(history)
+      ? history
+          .filter((m: any) => m && (m.role === "user" || m.role === "assistant") && typeof m.text === "string" && m.text.trim())
+          .slice(-6)
+          .map((m: any) => ({ role: m.role, content: String(m.text).slice(0, 500) }))
+      : [];
 
     const sb = supabaseAdmin();
     let cid = college_id as string | undefined;
@@ -47,7 +55,7 @@ export async function POST(req: Request) {
         confidence: "none",
       });
       return NextResponse.json({
-        answer: "I don't have this in the college's official data yet. Please contact the college office — or ask faculty to upload the relevant document.",
+        answer: "Sorry, I don't have specific information about that at the moment. I'll be able to help once the relevant information is added to my knowledge base.",
         citations: [],
         confidence: "none",
         fallback: true,
@@ -63,9 +71,24 @@ export async function POST(req: Request) {
     const model = process.env.LLM_MODEL || "sarvam-105b";
     if (!key) return NextResponse.json({ error: "LLM not configured" }, { status: 500 });
 
-    const sys = `You answer ONLY from the CONTEXT below (college's verified documents). Rules:
+    const sys = `You are CollegeMate, a helpful college assistant for students. Answer ONLY from the CONTEXT below (the college's verified knowledge base).
+
+HARD RULES
+- Never invent, assume, or guess: no made-up names, phone numbers, emails, deadlines, fees, events, clubs, facilities, policies, or procedures. If it is not in CONTEXT, say so.
+- Preserve the exact meaning of dates, fees, eligibility, and procedures. If CONTEXT is incomplete or conflicting, state the uncertainty plainly instead of choosing.
+- Never claim information is current unless CONTEXT says so.
+- For harassment, ragging, threats, discrimination, mental-health, medical, or emergency topics: be supportive, make no accusations or diagnoses, and point to the verified college authority or emergency contact in CONTEXT. If none exists there, say so clearly.
 - If the answer is not in CONTEXT, reply exactly: NOT_IN_DATA
-- Otherwise reply as JSON: {"answer": "<2-4 sentence answer>", "used": [source numbers like 1,2], "confidence": "high|medium|low"}`;
+- Answer only what was asked; politely decline anything outside college knowledge.
+- If the question has multiple plausible meanings with different answers, ask which one is meant instead of guessing.
+- If a natural next step exists AND is in CONTEXT, offer it briefly at the end. Never force a follow-up.
+- Use the conversation history for context (pronouns, "it", "that workshop") instead of asking the student to repeat.
+
+STYLE
+- Warm, respectful, student-friendly plain sentences. Concise by default (2-4 sentences); bullets only when they help.
+- Plain text only: no markdown, no emojis, no ALL CAPS, no long disclaimers.
+- Name the source document or department inside the answer when it matters (fees, exams, deadlines, contacts).
+- Otherwise reply as JSON: {"answer": "<answer>", "used": [source numbers like 1,2], "confidence": "high|medium|low"}`;
     const res = await fetch(SARVAM_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json", "api-subscription-key": key, Authorization: `Bearer ${key}` },
@@ -73,6 +96,7 @@ export async function POST(req: Request) {
         model,
         messages: [
           { role: "system", content: sys },
+          ...past,
           { role: "user", content: `CONTEXT:\n${context}\n\nQUESTION: ${question}` },
         ],
         max_tokens: 600,
@@ -103,7 +127,7 @@ export async function POST(req: Request) {
     const content = (msg.content || msg.reasoning_content || "").trim();
     if (content.trim() === "NOT_IN_DATA" || content.includes("NOT_IN_DATA")) {
       return NextResponse.json({
-        answer: "I don't have this in the college's official data yet. Please contact the college office — or ask faculty to upload the relevant document.",
+        answer: "Sorry, I don't have specific information about that at the moment. I'll be able to help once the relevant information is added to my knowledge base.",
         citations: [],
         confidence: "none",
         fallback: true,
