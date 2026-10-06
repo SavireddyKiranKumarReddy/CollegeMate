@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     const THANKS = new Set(["thanks", "thank you", "thankyou", "thanks a lot", "thank you so much"]);
     const BYE = new Set(["bye", "goodbye", "see you", "see you later"]);
     let small: string | null = null;
-    if (GREET.has(norm)) small = `Hello! I'm CollegeMate. Ask me anything about ${cname} — exams, fees, attendance, hostel, placements — and I'll answer from official college documents.`;
+    if (GREET.has(norm)) small = `Hello! I'm CollegeMate. Ask me anything about ${cname}, like exams, fees, attendance, hostel or placements, and I'll answer from official college documents.`;
     else if (THANKS.has(norm)) small = "You're welcome! Ask anytime you need something about your college.";
     else if (BYE.has(norm)) small = "Goodbye! I'll be here whenever you have a question about your college.";
     if (small) {
@@ -110,6 +110,7 @@ HARD RULES
 STYLE
 - Warm, respectful, student-friendly plain sentences. Concise by default (2-4 sentences); bullets only when they help.
 - Plain text only: no markdown, no emojis, no ALL CAPS, no long disclaimers.
+- Use almost no dashes: never use em-dashes or dash-led breaks to join ideas. Use commas or full stops instead. A dash is allowed only when highly required for meaning.
 - Name the source document or department inside the answer when it matters (fees, exams, deadlines, contacts).
 - Otherwise reply as JSON: {"answer": "<answer>", "used": [source numbers like 1,2], "confidence": "high|medium|low"}`;
     const res = await fetch(SARVAM_URL, {
